@@ -69,6 +69,7 @@
   .links { display: flex; gap: 22px; margin-left: 12px; font-size: 15px; }
   .links a { color: var(--muted); text-decoration: none; }
   .links a:hover { color: var(--ink); }
+  .links a[aria-current="true"] { color: var(--ink); font-weight: 600; }
   .bar-end { margin-left: auto; display: flex; align-items: center; gap: 12px; }
   .lang { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
   .lang button {
@@ -153,7 +154,9 @@
   .win-bar .ctl span { width: 44px; text-align: center; font-size: 13px; }
 
   /* Sections */
-  section { padding: 104px 0 0; scroll-margin-top: 64px; }
+  /* A nav link lands with the section's heading just under the sticky bar
+     (64px bar + 32px air - 104px top padding). */
+  section { padding: 104px 0 0; scroll-margin-top: -8px; }
   .kicker { color: var(--accent); font-weight: 700; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; }
   h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.12; letter-spacing: -0.02em; margin: 10px 0 14px; }
   .center { text-align: center; }
@@ -263,7 +266,10 @@
   }
   .end h2 { margin: 0 0 10px; }
   .end p { margin: 0 0 26px; opacity: 0.85; }
-  .end .btn { background: var(--accent-ink); color: var(--accent); border-color: var(--accent-ink); }
+  .end .btn { background: transparent; color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent-ink) 45%, transparent); }
+  .end .btn.primary { background: var(--accent-ink); color: var(--accent); border-color: var(--accent-ink); }
+  .dl-note { margin-top: 4px; }
+  @media (max-width: 600px) { .cta .btn { width: 100%; justify-content: center; } }
   footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; display: flex; gap: 18px; flex-wrap: wrap; }
   footer a { color: var(--muted); }
 </style>
@@ -306,9 +312,13 @@
         <span class="live-text"><span class="en">Get it from the Microsoft Store</span><span class="id">Dapatkan di Microsoft Store</span></span>
         <span class="soon-text"><span class="en">Coming soon to the Microsoft Store</span><span class="id">Segera hadir di Microsoft Store</span></span>
       </a>
-      <a class="btn" href="#how"><span class="en">See how it works</span><span class="id">Lihat cara kerjanya</span></a>
+      <a class="btn dl-btn" href="https://github.com/kangkungmozzarella/kangkungmozzarella.github.io/releases/latest/download/Klyn-Setup-x64.exe">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2.5a.5.5 0 0 1 .5.5v9.79l3.15-3.14a.5.5 0 0 1 .7.7l-4 4a.5.5 0 0 1-.7 0l-4-4a.5.5 0 0 1 .7-.7l3.15 3.14V3a.5.5 0 0 1 .5-.5M4.5 16a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1z"/></svg>
+        <span class="en">Download for Windows</span><span class="id">Download untuk Windows</span>
+      </a>
     </div>
     <p class="fine"><span class="en">Free for one folder · Klyn Pro is a single payment</span><span class="id">Gratis untuk satu folder · Klyn Pro cukup sekali bayar</span></p>
+    <p class="fine dl-note"><span class="en">The download is a 3 MB installer. Windows may not know Klyn yet: choose <b>More info → Run anyway</b>.</span><span class="id">Download-nya installer 3 MB. Windows mungkin belum mengenal Klyn: pilih <b>More info → Run anyway</b>.</span></p>
     <div class="hero-shot win">
       <div class="win-bar" aria-hidden="true"><img src="klyn.png" alt="">Klyn<span class="ctl"><span>–</span><span>▢</span><span>✕</span></span></div>
       <img data-shot="tidy" data-dark="1" src="img/en-tidy.webp" width="1600" height="1000" alt="Klyn's Tidy now page: 18 files in Downloads and Desktop grouped into Images, Documents, Videos and more, each with where it will go.">
@@ -438,6 +448,10 @@
         <tr><th scope="row"><span class="en">Scheduled tidy-ups</span><span class="id">Rapikan terjadwal</span></th><td><span class="no" role="img" aria-label="Not included">—</span></td><td class="pro-col"><span class="yes" role="img" aria-label="Included"></span></td></tr>
         <tr><th scope="row"><span class="en">Duplicate finder</span><span class="id">Pencari duplikat</span></th><td><span class="no" role="img" aria-label="Not included">—</span></td><td class="pro-col"><span class="yes" role="img" aria-label="Included"></span></td></tr>
         <tr><th scope="row"><span class="en">Disk space report</span><span class="id">Laporan ruang disk</span></th><td><span class="no" role="img" aria-label="Not included">—</span></td><td class="pro-col"><span class="yes" role="img" aria-label="Included"></span></td></tr>
+        <tr><th scope="row"><span class="en">Photos sorted by the date they were taken</span><span class="id">Foto disusun per tanggal diambil</span></th><td><span class="no" role="img" aria-label="Not included">—</span></td><td class="pro-col"><span class="yes" role="img" aria-label="Included"></span></td></tr>
+        <tr><th scope="row"><span class="en">Rules that read the text inside files (PDF, Office, screenshots)</span><span class="id">Aturan yang membaca teks di dalam file (PDF, Office, screenshot)</span></th><td><span class="no" role="img" aria-label="Not included">—</span></td><td class="pro-col"><span class="yes" role="img" aria-label="Included"></span></td></tr>
+        <tr><th scope="row"><span class="en">Archive old files into a .zip</span><span class="id">Arsipkan file lama ke .zip</span></th><td><span class="no" role="img" aria-label="Not included">—</span></td><td class="pro-col"><span class="yes" role="img" aria-label="Included"></span></td></tr>
+        <tr><th scope="row"><span class="en">Photo import from camera cards and USB drives</span><span class="id">Impor foto dari kartu kamera dan flashdisk</span></th><td><span class="no" role="img" aria-label="Not included">—</span></td><td class="pro-col"><span class="yes" role="img" aria-label="Included"></span></td></tr>
       </tbody>
     </table>
     </div>
@@ -481,6 +495,10 @@
         <div class="answer"><p><span class="en">Open History and press Undo. Files go back where they were, even ones sent to the Recycle Bin, as long as they're still there.</span><span class="id">Buka Riwayat dan tekan Urungkan. File kembali ke tempat semula, termasuk yang dibuang ke Recycle Bin, selama masih ada di sana.</span></p></div>
       </details>
       <details>
+        <summary><span class="en">Microsoft Store or download?</span><span class="id">Microsoft Store atau download?</span></summary>
+        <div class="answer"><p><span class="en">Both are the same Klyn. The Microsoft Store version updates itself and is where Klyn Pro is bought. The download is the free version; get the new installer here to update it. Your rules and history carry over either way.</span><span class="id">Keduanya Klyn yang sama. Versi Microsoft Store terupdate sendiri dan menjadi tempat membeli Klyn Pro. Versi download adalah versi gratis; ambil installer baru di sini untuk update. Aturan dan riwayatmu tetap terbawa.</span></p></div>
+      </details>
+      <details>
         <summary><span class="en">Which Windows versions?</span><span class="id">Windows versi berapa?</span></summary>
         <div class="answer"><p><span class="en">Windows 10 (version 1809 or later) and Windows 11.</span><span class="id">Windows 10 (versi 1809 atau lebih baru) dan Windows 11.</span></p></div>
       </details>
@@ -490,11 +508,17 @@
   <div class="end">
     <h2><span class="en">Give your Downloads folder a rest.</span><span class="id">Saatnya folder Downloads-mu rapi.</span></h2>
     <p><span class="en">Free to start. Your files stay yours.</span><span class="id">Gratis untuk mulai. File-mu tetap milikmu.</span></p>
-    <a class="btn store-btn" href="https://apps.microsoft.com/detail/9PPMQGCJ0SMV">
+    <div class="cta">
+    <a class="btn primary store-btn" href="https://apps.microsoft.com/detail/9PPMQGCJ0SMV">
       <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M2 2h7.5v7.5H2zm8.5 0H18v7.5h-7.5zM2 10.5h7.5V18H2zm8.5 0H18V18h-7.5z"/></svg>
       <span class="live-text"><span class="en">Get it from the Microsoft Store</span><span class="id">Dapatkan di Microsoft Store</span></span>
       <span class="soon-text"><span class="en">Coming soon to the Microsoft Store</span><span class="id">Segera hadir di Microsoft Store</span></span>
     </a>
+    <a class="btn dl-btn" href="https://github.com/kangkungmozzarella/kangkungmozzarella.github.io/releases/latest/download/Klyn-Setup-x64.exe">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2.5a.5.5 0 0 1 .5.5v9.79l3.15-3.14a.5.5 0 0 1 .7.7l-4 4a.5.5 0 0 1-.7 0l-4-4a.5.5 0 0 1 .7-.7l3.15 3.14V3a.5.5 0 0 1 .5-.5M4.5 16a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1z"/></svg>
+        <span class="en">Download for Windows</span><span class="id">Download untuk Windows</span>
+      </a>
+    </div>
   </div>
 
   <footer>
@@ -547,9 +571,15 @@
   document.querySelectorAll(".live-text").forEach((e) => (e.hidden = !STORE_LIVE));
   document.querySelectorAll(".soon-text").forEach((e) => (e.hidden = STORE_LIVE));
   if (!STORE_LIVE) {
+    // Not in the Store yet: the download leads, the Store button says "coming soon".
     document.querySelectorAll(".store-btn").forEach((a) => {
       a.removeAttribute("href");
       a.classList.add("soon");
+      a.classList.remove("primary");
+    });
+    document.querySelectorAll(".dl-btn").forEach((a) => {
+      a.classList.add("primary");
+      a.parentElement.prepend(a);
     });
   }
 
@@ -606,6 +636,18 @@
       };
     });
   });
+
+  // The nav link of the section being read is marked.
+  const links = [...document.querySelectorAll('.links a[href^="#"]')];
+  const sections = links.map((a) => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+  const mark = () => {
+    const line = 120;
+    let current = null;
+    for (const s of sections) if (s.getBoundingClientRect().top - 8 <= line) current = s;
+    links.forEach((a) => a.setAttribute("aria-current", String(!!current && a.getAttribute("href") === "#" + current.id)));
+  };
+  addEventListener("scroll", mark, { passive: true });
+  mark();
 
   const bar = document.getElementById("top");
   addEventListener("scroll", () => bar.classList.toggle("scrolled", scrollY > 8), { passive: true });
