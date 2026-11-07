@@ -269,6 +269,9 @@
   .end .btn { background: transparent; color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent-ink) 45%, transparent); }
   .end .btn.primary { background: var(--accent-ink); color: var(--accent); border-color: var(--accent-ink); }
   .dl-note { margin-top: 4px; }
+  /* "Get Klyn" lands with the buttons well below the sticky bar and the
+     sentence above them still in view. */
+  #get { scroll-margin-top: 200px; }
   @media (max-width: 600px) { .cta .btn { width: 100%; justify-content: center; } }
   footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; display: flex; gap: 18px; flex-wrap: wrap; }
   footer a { color: var(--muted); }
