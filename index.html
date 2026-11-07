@@ -20,6 +20,7 @@
     --accent-ink: #ffffff;
     --mint: #7fc3b2;
     --soft: #e4f0ec;
+    --warm: #faf3e3;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 18px 50px rgba(30, 50, 45, 0.12);
     color-scheme: light dark;
   }
@@ -33,6 +34,7 @@
       --accent: #7fc3b2;
       --accent-ink: #10201c;
       --soft: #1f2e2a;
+      --warm: #29251c;
       --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 18px 50px rgba(0, 0, 0, 0.45);
     }
   }
@@ -216,6 +218,8 @@
   .compare .plan-name { display: block; font-size: 20px; font-weight: 700; }
   .compare .plan-price { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
   .compare .pro-col { background: var(--soft); }
+  /* Free gets a soft warm tint: told apart from Pro, without outshining it. */
+  .compare tr > :nth-child(2) { background: var(--warm); }
   .compare .yes { display: inline-block; width: 20px; height: 20px; vertical-align: middle; background: var(--accent); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M7.5 13.6 3.9 10a.75.75 0 1 0-1.06 1.06l4.13 4.13a.75.75 0 0 0 1.06 0l9.13-9.13a.75.75 0 1 0-1.06-1.06z'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M7.5 13.6 3.9 10a.75.75 0 1 0-1.06 1.06l4.13 4.13a.75.75 0 0 0 1.06 0l9.13-9.13a.75.75 0 1 0-1.06-1.06z'/%3E%3C/svg%3E") center / contain no-repeat; }
   .compare .no { color: var(--muted); opacity: 0.6; }
   .compare-note { max-width: 860px; margin: 14px auto 0; color: var(--muted); font-size: 15px; }
@@ -481,7 +485,7 @@
       <h2><span class="en">Questions</span><span class="id">Pertanyaan</span></h2>
     </div>
     <div class="faq">
-      <details>
+      <details open>
         <summary><span class="en">Does Klyn learn from what I do?</span><span class="id">Apakah Klyn belajar dari kebiasaanku?</span></summary>
         <div class="answer"><p><span class="en">No, on purpose. Klyn only follows rules you can see and change, so it never surprises you.</span><span class="id">Tidak, dan itu disengaja. Klyn hanya mengikuti aturan yang bisa kamu lihat dan ubah, jadi tidak pernah mengejutkan.</span></p></div>
       </details>
@@ -615,30 +619,40 @@
     });
   }
 
-  // FAQ: animate the answer's height when it opens and closes.
-  document.querySelectorAll(".faq details").forEach((d) => {
+  // FAQ: one answer open at a time (the first, to begin with). Opening one
+  // closes the other; both animate their height.
+  const faq = [...document.querySelectorAll(".faq details")];
+  const running = new Map();
+  const slide = (d, opening) => {
+    running.get(d)?.cancel();
+    if (calm) {
+      d.open = opening;
+      return;
+    }
     const answer = d.querySelector(".answer");
-    let anim = null;
+    if (opening) d.open = true;
+    const full = answer.scrollHeight + "px";
+    const anim = answer.animate(
+      [
+        { height: opening ? "0px" : full, opacity: opening ? 0 : 1 },
+        { height: opening ? full : "0px", opacity: opening ? 1 : 0 },
+      ],
+      { duration: 320, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" },
+    );
+    running.set(d, anim);
+    anim.onfinish = () => {
+      running.delete(d);
+      if (!opening) d.open = false;
+    };
+  };
+  faq.forEach((d) =>
     d.querySelector("summary").addEventListener("click", (e) => {
-      if (calm) return;
       e.preventDefault();
-      if (anim) anim.cancel();
       const opening = !d.open;
-      if (opening) d.open = true;
-      const full = answer.scrollHeight + "px";
-      anim = answer.animate(
-        [
-          { height: opening ? "0px" : full, opacity: opening ? 0 : 1 },
-          { height: opening ? full : "0px", opacity: opening ? 1 : 0 },
-        ],
-        { duration: 320, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" },
-      );
-      anim.onfinish = () => {
-        anim = null;
-        if (!opening) d.open = false;
-      };
-    });
-  });
+      if (opening) faq.forEach((other) => other !== d && other.open && slide(other, false));
+      slide(d, opening);
+    }),
+  );
 
   // The nav link of the section being read is marked.
   const links = [...document.querySelectorAll('.links a[href^="#"]')];
