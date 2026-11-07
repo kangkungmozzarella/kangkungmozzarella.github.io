@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Klyn Pro</title>
+<meta name="description" content="Your Klyn Pro licence key.">
+<link rel="icon" href="../klyn.png">
+<style>
+  :root {
+    --bg: #f6f6f3;
+    --panel: #ffffff;
+    --ink: #1b1b19;
+    --muted: #5f5f5a;
+    --line: #e3e3de;
+    --accent: #2f7d6d;
+    --accent-ink: #ffffff;
+    --soft: #e3f1ed;
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161615;
+      --panel: #1f1f1e;
+      --ink: #ededea;
+      --muted: #a3a39c;
+      --line: #33332f;
+      --accent: #7fc3b2;
+      --accent-ink: #10201c;
+      --soft: #1d302b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.6 "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  }
+  main { max-width: 640px; margin: 0 auto; padding: 40px 16px 64px; }
+  header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+  header img { width: 40px; height: 40px; border-radius: 10px; }
+  header strong { font-size: 20px; }
+  header button { margin-left: auto; }
+  a { color: var(--accent); }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 8px; }
+  .muted { color: var(--muted); }
+  .card {
+    margin: 24px 0;
+    padding: 18px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .key {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg);
+    color: var(--ink);
+    font: 13px/1.5 ui-monospace, "Cascadia Mono", Consolas, monospace;
+    word-break: break-all;
+    resize: none;
+  }
+  button {
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 9px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .row { display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+  ol { padding-left: 20px; }
+  li + li { margin-top: 6px; }
+  .spinner {
+    width: 18px; height: 18px; flex: none;
+    border: 2.5px solid var(--soft); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 3s; } }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="../klyn.png" alt="">
+    <strong>Klyn Pro</strong>
+    <button id="lang" type="button"></button>
+  </header>
+
+  <section id="wait" hidden>
+    <h1 data-t="waitTitle"></h1>
+    <div class="row"><span class="spinner" aria-hidden="true"></span><span class="muted" data-t="waitText"></span></div>
+  </section>
+
+  <section id="done" hidden>
+    <h1 data-t="doneTitle"></h1>
+    <p data-t="doneText"></p>
+    <div class="card">
+      <label for="key"><strong data-t="keyLabel"></strong></label>
+      <textarea id="key" class="key" rows="4" readonly></textarea>
+      <div class="row">
+        <button id="copy" class="primary" type="button" data-t="copy"></button>
+        <span id="copied" class="muted" data-t="copied" hidden></span>
+      </div>
+    </div>
+    <p class="muted" data-t="keyText"></p>
+    <ol>
+      <li data-t="step1"></li>
+      <li data-t="step2"></li>
+      <li data-t="step3"></li>
+    </ol>
+  </section>
+
+  <section id="failed" hidden>
+    <h1 data-t="failedTitle"></h1>
+    <p data-t="failedText"></p>
+  </section>
+
+  <section id="unknown" hidden>
+    <h1 data-t="unknownTitle"></h1>
+    <p data-t="unknownText"></p>
+  </section>
+
+  <p class="muted"><a href="../" data-t="home"></a> · <a href="../privacy/" data-t="privacy"></a></p>
+</main>
+<script>
+(() => {
+  // The licence server (`wrangler deploy` prints it); keep in step with src-tauri/src/license.rs.
+  const SERVER = "https://klyn-pro.klynapp.workers.dev";
+  const TEXT = {
+    en: {
+      other: "Bahasa Indonesia",
+      waitTitle: "Thank you!",
+      waitText: "Confirming your payment. This usually takes a few seconds.",
+      doneTitle: "Klyn Pro is yours.",
+      doneText: "If Klyn is open on this PC, it has already unlocked by itself.",
+      keyLabel: "Your licence key",
+      copy: "Copy key",
+      copied: "Copied",
+      keyText: "Keep this key: it unlocks Klyn Pro again after reinstalling, or on another PC of yours.",
+      step1: "In Klyn, click “See Klyn Pro” (bottom left).",
+      step2: "Click “I have a licence key” and paste the key.",
+      step3: "Click “Activate”.",
+      failedTitle: "The payment didn't go through.",
+      failedText: "Nothing was charged. You can try again from Klyn: “See Klyn Pro” → “Get Klyn Pro”.",
+      unknownTitle: "Klyn Pro",
+      unknownText: "Buy Klyn Pro from inside Klyn: “See Klyn Pro” at the bottom left. If you paid and see this, open the link from the payment page again, or contact us with your payment receipt.",
+      home: "Klyn home",
+      privacy: "Privacy",
+    },
+    id: {
+      other: "English",
+      waitTitle: "Terima kasih!",
+      waitText: "Memastikan pembayaranmu. Biasanya hanya beberapa detik.",
+      doneTitle: "Klyn Pro sudah jadi milikmu.",
+      doneText: "Kalau Klyn sedang terbuka di PC ini, Klyn sudah terbuka sendiri.",
+      keyLabel: "Kode lisensimu",
+      copy: "Salin kode",
+      copied: "Tersalin",
+      keyText: "Simpan kode ini: untuk membuka Klyn Pro lagi setelah install ulang, atau di PC-mu yang lain.",
+      step1: "Di Klyn, klik “Lihat Klyn Pro” (kiri bawah).",
+      step2: "Klik “Saya punya kode lisensi”, lalu tempel kodenya.",
+      step3: "Klik “Aktifkan”.",
+      failedTitle: "Pembayaran tidak berhasil.",
+      failedText: "Tidak ada yang ditagih. Kamu bisa mencoba lagi dari Klyn: “Lihat Klyn Pro” → “Dapatkan Klyn Pro”.",
+      unknownTitle: "Klyn Pro",
+      unknownText: "Beli Klyn Pro dari dalam Klyn: “Lihat Klyn Pro” di kiri bawah. Kalau kamu sudah bayar dan melihat ini, buka lagi tautan dari halaman pembayaran, atau hubungi kami dengan bukti pembayaranmu.",
+      home: "Beranda Klyn",
+      privacy: "Privasi",
+    },
+  };
+
+  const params = new URLSearchParams(location.search);
+  const asked = params.get("lang");
+  let lang = asked === "id" || asked === "en" ? asked : (navigator.language || "").toLowerCase().startsWith("id") ? "id" : "en";
+
+  function render() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-t]").forEach((el) => (el.textContent = TEXT[lang][el.dataset.t]));
+    document.getElementById("lang").textContent = TEXT[lang].other;
+  }
+  document.getElementById("lang").addEventListener("click", () => {
+    lang = lang === "id" ? "en" : "id";
+    render();
+  });
+  render();
+
+  const show = (id) => ["wait", "done", "failed", "unknown"].forEach((s) => (document.getElementById(s).hidden = s !== id));
+  const order = params.get("order");
+  const claim = params.get("claim");
+
+  if (params.get("failed")) return show("failed");
+  if (!order || !claim || !SERVER) return show("unknown");
+
+  show("wait");
+  let tries = 0;
+  async function look() {
+    tries++;
+    try {
+      const res = await fetch(`${SERVER}/license?order=${encodeURIComponent(order)}&claim=${encodeURIComponent(claim)}`);
+      const body = await res.json();
+      if (body.status === "paid" && body.license) {
+        document.getElementById("key").value = body.license;
+        return show("done");
+      }
+      if (res.status === 404) return show("unknown");
+    } catch {}
+    // Every 3 s for two minutes, then every 15 s.
+    setTimeout(look, tries < 40 ? 3000 : 15000);
+  }
+  look();
+
+  document.getElementById("copy").addEventListener("click", () => {
+    const key = document.getElementById("key");
+    navigator.clipboard.writeText(key.value).then(
+      () => (document.getElementById("copied").hidden = false),
+      () => key.select(),
+    );
+  });
+})();
+</script>
+</body>
+</html>
