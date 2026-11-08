@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Statistik Unduhan Klyn</title>
+<link rel="icon" href="../klyn.png">
+<style>
+  /* Klyn's own tokens (src/App.css). Layout: one column, the total first, then versions and a log. */
+  :root {
+    --bg: #f6f6f3;
+    --panel: #ffffff;
+    --ink: #1c1c1a;
+    --muted: #6d6d66;
+    --line: #e2e2dc;
+    --accent: #2f7d6d;
+    --soft: #e3f1ed;
+    --warn-soft: #fbf0dc;
+    --warn-ink: #6b4a12;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161615;
+      --panel: #1f1f1e;
+      --ink: #ededea;
+      --muted: #a3a39c;
+      --line: #33332f;
+      --accent: #7fc3b2;
+      --soft: #1d302b;
+      --warn-soft: #3a2f1a;
+      --warn-ink: #f0d9a8;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.55 "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-block: 36px 56px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid;
+    gap: 20px;
+  }
+  header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  header img { width: 36px; height: 36px; border-radius: 9px; }
+  header strong { font-size: 19px; }
+  header .muted { margin-left: auto; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    min-width: 0;
+  }
+  .total { display: grid; gap: 4px; }
+  .label { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .big {
+    font-size: clamp(56px, 16vw, 88px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+  .new {
+    justify-self: start;
+    margin-top: 8px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--soft);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .bar .muted { flex: 1; min-width: 0; }
+  button {
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .error { background: var(--warn-soft); color: var(--warn-ink); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+  h2 { font-size: 15px; margin: 0 0 10px; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th { font-size: 13px; color: var(--muted); font-weight: 600; }
+  td.num, th.num { text-align: right; }
+  tr:last-child td { border-bottom: none; }
+  ol.log { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-variant-numeric: tabular-nums; }
+  ol.log li { display: flex; justify-content: space-between; gap: 12px; font-size: 15px; }
+  ol.log b { color: var(--accent); }
+  @media (prefers-reduced-motion: no-preference) {
+    .bump { animation: bump 0.6s ease-out; }
+    @keyframes bump { from { color: var(--accent); transform: scale(1.04); } to { transform: none; } }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="../klyn.png" alt="">
+    <strong>Unduhan Klyn</strong>
+    <span class="muted">versi web (GitHub)</span>
+  </header>
+
+  <section class="card total" aria-live="polite">
+    <span class="label">Total unduhan installer</span>
+    <span class="big" id="total">…</span>
+    <span class="new" id="new" hidden></span>
+  </section>
+
+  <div class="bar">
+    <span class="muted" id="updated">Mengambil data…</span>
+    <button id="refresh" type="button">Perbarui sekarang</button>
+  </div>
+  <div class="error" id="error" hidden></div>
+
+  <section class="card">
+    <h2>Per versi</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Versi</th><th>Rilis</th><th class="num">Ukuran</th><th class="num">Unduhan</th></tr></thead>
+        <tbody id="versions"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Unduhan baru yang terlihat dari browser ini</h2>
+    <ol class="log" id="log"></ol>
+    <p class="muted" id="log-empty">Belum ada. Setiap kali angkanya naik saat halaman ini terbuka, catatannya muncul di sini.</p>
+  </section>
+
+  <p class="muted">Angka dari GitHub, diperbarui otomatis tiap 2 menit (GitHub sendiri bisa tertunda beberapa menit). Ini jumlah unduhan, bukan jumlah orang: unduhan ulang ikut terhitung. Unduhan dari Microsoft Store ada di Partner Center.</p>
+</main>
+<script>
+(() => {
+  const API = "https://api.github.com/repos/kangkungmozzarella/kangkungmozzarella.github.io/releases?per_page=100";
+  const ASSET = "Klyn-Setup-x64.exe";
+  const EVERY = 120000;
+  const $ = (id) => document.getElementById(id);
+  const fmt = new Intl.NumberFormat("id-ID");
+  const time = (d) => d.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+  const day = (d) => d.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
+
+  // Per-browser memory: the total at the last visit and the increases seen.
+  const load = (k, fallback) => { try { return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch { return fallback; } };
+  const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+  const lastVisit = load("klyn-stats-last-visit", null);
+  let log = load("klyn-stats-log", []);
+  let shown = null;
+
+  function renderLog() {
+    $("log").innerHTML = "";
+    log.slice(-20).reverse().forEach((e) => {
+      const li = document.createElement("li");
+      const d = new Date(e.t);
+      li.innerHTML = `<span>${day(d)}, ${time(d)}</span><b>+${fmt.format(e.n)}</b>`;
+      $("log").append(li);
+    });
+    $("log-empty").hidden = log.length > 0;
+  }
+
+  async function refresh() {
+    $("refresh").disabled = true;
+    try {
+      const res = await fetch(API, { headers: { accept: "application/vnd.github+json" }, cache: "no-store" });
+      if (res.status === 403 || res.status === 429) {
+        const reset = Number(res.headers.get("x-ratelimit-reset")) * 1000;
+        throw new Error(`GitHub membatasi permintaan sementara. Coba lagi${reset ? " setelah " + time(new Date(reset)) : " sebentar lagi"}.`);
+      }
+      if (!res.ok) throw new Error(`GitHub menjawab ${res.status}. Coba lagi sebentar lagi.`);
+      const releases = await res.json();
+      const rows = releases
+        .map((r) => ({ tag: r.tag_name, at: new Date(r.published_at), asset: r.assets.find((a) => a.name === ASSET) }))
+        .filter((r) => r.asset);
+      const total = rows.reduce((n, r) => n + r.asset.download_count, 0);
+
+      $("versions").innerHTML = "";
+      rows.forEach((r) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${r.tag}</td><td>${day(r.at)}</td><td class="num">${(r.asset.size / 1048576).toFixed(1)} MB</td><td class="num"><b>${fmt.format(r.asset.download_count)}</b></td>`;
+        $("versions").append(tr);
+      });
+
+      if (shown !== null && total > shown) {
+        log.push({ t: Date.now(), n: total - shown });
+        log = log.slice(-200);
+        save("klyn-stats-log", log);
+        $("total").classList.remove("bump");
+        void $("total").offsetWidth;
+        $("total").classList.add("bump");
+      }
+      shown = total;
+      $("total").textContent = fmt.format(total);
+      if (lastVisit && total > lastVisit.total) {
+        $("new").textContent = `+${fmt.format(total - lastVisit.total)} sejak kamu terakhir membuka (${day(new Date(lastVisit.t))}, ${time(new Date(lastVisit.t))})`;
+        $("new").hidden = false;
+      }
+      save("klyn-stats-last-visit", { t: Date.now(), total });
+      renderLog();
+      $("updated").textContent = `Diperbarui ${time(new Date())}`;
+      $("error").hidden = true;
+    } catch (e) {
+      $("error").textContent = e.message || "Tidak bisa menghubungi GitHub. Periksa koneksi internet.";
+      $("error").hidden = false;
+    } finally {
+      $("refresh").disabled = false;
+    }
+  }
+
+  $("refresh").addEventListener("click", refresh);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
+  renderLog();
+  refresh();
+  setInterval(() => { if (!document.hidden) refresh(); }, EVERY);
+})();
+</script>
+</body>
+</html>
