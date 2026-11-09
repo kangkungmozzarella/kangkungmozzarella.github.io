@@ -197,8 +197,10 @@
   render();
 
   const show = (id) => ["wait", "done", "failed", "unknown"].forEach((s) => (document.getElementById(s).hidden = s !== id));
-  const order = params.get("order");
-  const claim = params.get("claim");
+  // Duitku adds its own parameters to this address; keep only the part of each value that can be ours.
+  const token = (name) => (params.get(name) || "").match(/^[A-Za-z0-9_-]*/)[0];
+  const order = token("order");
+  const claim = token("claim");
 
   if (params.get("failed")) return show("failed");
   if (!order || !claim || !SERVER) return show("unknown");
