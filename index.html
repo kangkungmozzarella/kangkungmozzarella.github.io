@@ -277,6 +277,26 @@
      sentence above them still in view. */
   #get { scroll-margin-top: 200px; }
   @media (max-width: 600px) { .cta .btn { width: 100%; justify-content: center; } }
+  .compare .plan-cost { display: block; font-size: 15px; font-weight: 700; color: var(--ink); }
+  .buy { margin: 28px auto 0; max-width: 640px; }
+  .buy .fine { margin-top: 12px; }
+  .contact {
+    margin-top: 64px;
+    padding: 32px;
+    border-radius: 20px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .contact h2 { font-size: clamp(26px, 3vw, 32px); line-height: 1.15; margin: 8px 0 10px; }
+  .contact .sub { font-size: 16px; }
+  .contact-list { margin: 0; display: grid; gap: 16px; }
+  .contact-list dt { color: var(--muted); font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .contact-list dd { margin: 2px 0 0; font-size: 17px; overflow-wrap: anywhere; }
+  @media (max-width: 820px) { .contact { grid-template-columns: 1fr; padding: 24px 20px; gap: 20px; } }
   footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; display: flex; gap: 18px; flex-wrap: wrap; }
   footer a { color: var(--muted); }
 </style>
@@ -324,7 +344,7 @@
         <span class="en">Download for Windows</span><span class="id">Download untuk Windows</span>
       </a>
     </div>
-    <p class="fine"><span class="en">Free for one folder · Klyn Pro coming soon, a single payment</span><span class="id">Gratis untuk satu folder · Klyn Pro segera hadir, cukup sekali bayar</span></p>
+    <p class="fine"><span class="en">Free for one folder · <a href="buy/">Klyn Pro</a>: Rp 79.000, a single payment</span><span class="id">Gratis untuk satu folder · <a href="buy/">Klyn Pro</a>: Rp 79.000, cukup sekali bayar</span></p>
     <p class="fine dl-note"><span class="en">The download is a 3 MB installer. Windows may not know Klyn yet: choose <b>More info → Run anyway</b>.</span><span class="id">Download-nya installer 3 MB. Windows mungkin belum mengenal Klyn: pilih <b>More info → Run anyway</b>.</span></p>
     <div class="hero-shot win">
       <div class="win-bar" aria-hidden="true"><img src="klyn.png" alt="">Klyn<span class="ctl"><span>–</span><span>▢</span><span>✕</span></span></div>
@@ -441,7 +461,7 @@
         <tr>
           <td></td>
           <th scope="col"><span class="plan-name"><span class="en">Free</span><span class="id">Gratis</span></span><span class="plan-price"><span class="en">Free, always</span><span class="id">Gratis, selamanya</span></span></th>
-          <th scope="col" class="pro-col"><span class="plan-name">Klyn Pro</span><span class="plan-price"><span class="en">Coming soon · one payment, yours for good</span><span class="id">Segera hadir · bayar sekali, milik selamanya</span></span></th>
+          <th scope="col" class="pro-col"><span class="plan-name">Klyn Pro</span><span class="plan-price"><b class="plan-cost">Rp 79.000</b><span class="en">one payment, yours for good</span><span class="id">bayar sekali, milik selamanya</span></span></th>
         </tr>
       </thead>
       <tbody>
@@ -463,6 +483,12 @@
     </table>
     </div>
     <p class="compare-note"><span class="en">Preview, undo and the Recycle Bin safety net are never behind Pro. With Free, rules for extra folders are kept, just paused.</span><span class="id">Pratinjau, urungkan, dan pengaman Recycle Bin tidak pernah dikunci di Pro. Di versi gratis, aturan untuk folder tambahan tetap disimpan, hanya diistirahatkan.</span></p>
+    <div class="buy">
+      <a class="btn primary" href="buy/">
+        <span class="en">Buy Klyn Pro · Rp 79.000</span><span class="id">Beli Klyn Pro · Rp 79.000</span>
+      </a>
+      <p class="fine"><span class="en">Pay with QRIS, e-wallets, virtual accounts or retail outlets through Duitku. Your licence key arrives right after payment. <a href="terms/#refund">14-day refund.</a></span><span class="id">Bayar dengan QRIS, e-wallet, virtual account, atau gerai retail lewat Duitku. Kode lisensimu langsung diberikan setelah pembayaran. <a href="terms/#refund-id">Refund 14 hari.</a></span></p>
+    </div>
     <div class="shots" style="text-align:left">
       <figure>
         <div class="win"><img data-shot="settings" src="img/en-settings.webp" width="1600" height="1000" loading="lazy" alt="Settings: check on a schedule on weekdays at 6:00 PM."></div>
@@ -528,11 +554,24 @@
     </div>
   </div>
 
+  <section id="contact" class="contact">
+    <div>
+      <div class="kicker"><span class="en">Contact</span><span class="id">Kontak</span></div>
+      <h2><span class="en">Questions? Talk to the maker.</span><span class="id">Ada pertanyaan? Langsung ke pembuatnya.</span></h2>
+      <p class="sub"><span class="en">Klyn is made and sold by Andrea Micola Azwir, an independent developer in Indonesia. Help with Klyn, a lost licence key or a refund: we reply within 2 working days.</span><span class="id">Klyn dibuat dan dijual oleh Andrea Micola Azwir, developer perorangan di Indonesia. Bantuan soal Klyn, kode lisensi yang hilang, atau refund: kami balas dalam 2 hari kerja.</span></p>
+    </div>
+    <dl class="contact-list">
+      <div><dt>Email</dt><dd><a href="mailto:andreamicolaazwir@gmail.com">andreamicolaazwir@gmail.com</a></dd></div>
+      <div><dt><span class="en">Phone</span><span class="id">Telepon</span></dt><dd><a href="tel:+6282276043336">+62 822-7604-3336</a></dd></div>
+      <div><dt><span class="en">Address</span><span class="id">Alamat</span></dt><dd>Desa Selemak, Andan Sari, Kec. Hamparan Perak, Kab. Deli Serdang, Sumatera Utara, Indonesia</dd></div>
+    </dl>
+  </section>
+
   <footer>
     <span>© 2026 Andrea Micola Azwir</span>
     <a href="privacy/"><span class="en">Privacy policy</span><span class="id">Kebijakan privasi</span></a>
     <a href="terms/"><span class="en">Terms and refunds</span><span class="id">Syarat dan refund</span></a>
-    <a href="terms/#contact"><span class="en">Contact</span><span class="id">Kontak</span></a>
+    <a href="#contact"><span class="en">Contact</span><span class="id">Kontak</span></a>
     <a href="https://www.threads.com/@andreamicolaazwir">Threads</a>
   </footer>
 </main>
@@ -598,7 +637,7 @@
   // Reveal on scroll; items in one grid come in one after another.
   if (!calm && "IntersectionObserver" in window) {
     const items = document.querySelectorAll(
-      ".hero-shot, section .kicker, section h2, section .sub, .step, #how > .win, .row .text, .row .win, .card, .compare-wrap, .compare-note, .shots figure, .faq details, .end",
+      ".hero-shot, section .kicker, section h2, section .sub, .step, #how > .win, .row .text, .row .win, .card, .compare-wrap, .compare-note, .buy, .shots figure, .faq details, .end, .contact",
     );
     const seen = new IntersectionObserver(
       (entries) =>

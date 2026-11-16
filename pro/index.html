@@ -87,6 +87,16 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 3s; } }
+  .test {
+    margin: 0 0 24px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px dashed #b7791f;
+    background: #fdf3df;
+    color: #6b4710;
+    font-size: 14px;
+  }
+  @media (prefers-color-scheme: dark) { .test { background: #2c2416; color: #f0d29b; border-color: #8a6420; } }
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -97,6 +107,8 @@
     <strong>Klyn Pro</strong>
     <button id="lang" type="button"></button>
   </header>
+
+  <p id="test" class="test" hidden><strong data-t="testTitle"></strong> <span data-t="testText"></span></p>
 
   <section id="wait" hidden>
     <h1 data-t="waitTitle"></h1>
@@ -132,19 +144,22 @@
     <p data-t="unknownText"></p>
   </section>
 
-  <p class="muted"><a href="../" data-t="home"></a> · <a href="../privacy/" data-t="privacy"></a></p>
+  <p class="muted"><a href="../" data-t="home"></a> · <a href="../buy/" data-t="buy"></a> · <a href="../terms/#contact" data-t="contact"></a> · <a href="../privacy/" data-t="privacy"></a></p>
 </main>
 <script>
 (() => {
-  // The licence server (`wrangler deploy` prints it); keep in step with src-tauri/src/license.rs.
-  const SERVER = "https://klyn-pro.klynapp.workers.dev";
+  // The licence server (`wrangler deploy` prints it); keep in step with src-tauri/src/license.rs
+  // and site/buy/. Orders from the sandbox Worker come back with ?sandbox=1 (test payments, test keys).
+  const params = new URLSearchParams(location.search);
+  const SANDBOX = params.get("sandbox") === "1";
+  const SERVER = SANDBOX ? "https://klyn-pro-sandbox.klynapp.workers.dev" : "https://klyn-pro.klynapp.workers.dev";
   const TEXT = {
     en: {
       other: "Bahasa Indonesia",
       waitTitle: "Thank you!",
       waitText: "Confirming your payment. This usually takes a few seconds.",
       doneTitle: "Klyn Pro is yours.",
-      doneText: "If Klyn is open on this PC, it has already unlocked by itself.",
+      doneText: "Bought from inside Klyn? It has already unlocked by itself. Bought on the website? Paste the key into Klyn as shown below.",
       keyLabel: "Your licence key",
       copy: "Copy key",
       copied: "Copied",
@@ -153,10 +168,14 @@
       step2: "Click “I have a licence key” and paste the key.",
       step3: "Click “Activate”.",
       failedTitle: "The payment didn't go through.",
-      failedText: "Nothing was charged. You can try again from Klyn: “See Klyn Pro” → “Get Klyn Pro”.",
+      failedText: "Nothing was charged. You can try again on the Klyn Pro page.",
       unknownTitle: "Klyn Pro",
-      unknownText: "Buy Klyn Pro from inside Klyn: “See Klyn Pro” at the bottom left. If you paid and see this, open the link from the payment page again, or contact us with your payment receipt.",
+      unknownText: "Buy Klyn Pro on the Klyn Pro page. If you paid and see this, open the link from the payment page again, or contact us with your payment receipt.",
+      testTitle: "Test mode.",
+      testText: "This was a Duitku sandbox payment: no real money moved, and this key doesn't unlock Klyn.",
       home: "Klyn home",
+      buy: "Klyn Pro",
+      contact: "Contact",
       privacy: "Privacy",
     },
     id: {
@@ -164,7 +183,7 @@
       waitTitle: "Terima kasih!",
       waitText: "Memastikan pembayaranmu. Biasanya hanya beberapa detik.",
       doneTitle: "Klyn Pro sudah jadi milikmu.",
-      doneText: "Kalau Klyn sedang terbuka di PC ini, Klyn sudah terbuka sendiri.",
+      doneText: "Beli dari dalam Klyn? Klyn sudah terbuka sendiri. Beli di situs? Tempel kodenya di Klyn seperti di bawah.",
       keyLabel: "Kode lisensimu",
       copy: "Salin kode",
       copied: "Tersalin",
@@ -173,17 +192,25 @@
       step2: "Klik “Saya punya kode lisensi”, lalu tempel kodenya.",
       step3: "Klik “Aktifkan”.",
       failedTitle: "Pembayaran tidak berhasil.",
-      failedText: "Tidak ada yang ditagih. Kamu bisa mencoba lagi dari Klyn: “Lihat Klyn Pro” → “Dapatkan Klyn Pro”.",
+      failedText: "Tidak ada yang ditagih. Kamu bisa mencoba lagi di halaman Klyn Pro.",
       unknownTitle: "Klyn Pro",
-      unknownText: "Beli Klyn Pro dari dalam Klyn: “Lihat Klyn Pro” di kiri bawah. Kalau kamu sudah bayar dan melihat ini, buka lagi tautan dari halaman pembayaran, atau hubungi kami dengan bukti pembayaranmu.",
+      unknownText: "Beli Klyn Pro di halaman Klyn Pro. Kalau kamu sudah bayar dan melihat ini, buka lagi tautan dari halaman pembayaran, atau hubungi kami dengan bukti pembayaranmu.",
+      testTitle: "Mode uji.",
+      testText: "Ini pembayaran sandbox Duitku: tidak ada uang sungguhan yang berpindah, dan kode ini tidak membuka Klyn.",
       home: "Beranda Klyn",
+      buy: "Klyn Pro",
+      contact: "Kontak",
       privacy: "Privasi",
     },
   };
 
-  const params = new URLSearchParams(location.search);
   const asked = params.get("lang");
-  let lang = asked === "id" || asked === "en" ? asked : (navigator.language || "").toLowerCase().startsWith("id") ? "id" : "en";
+  // ?lang=, then the language picked on the site (same key as the home and checkout pages), then the browser's.
+  let saved = null;
+  try {
+    saved = localStorage.getItem("klyn-lang");
+  } catch {}
+  let lang = ["id", "en"].includes(asked) ? asked : ["id", "en"].includes(saved) ? saved : (navigator.language || "").toLowerCase().startsWith("id") ? "id" : "en";
 
   function render() {
     document.documentElement.lang = lang;
@@ -202,7 +229,9 @@
   const order = token("order");
   const claim = token("claim");
 
-  if (params.get("failed")) return show("failed");
+  document.getElementById("test").hidden = !SANDBOX;
+  // Duitku's resultCode on the way back: 00 paid, 01 waiting, 02 cancelled or failed.
+  if (params.get("failed") || params.get("resultCode") === "02") return show("failed");
   if (!order || !claim || !SERVER) return show("unknown");
 
   show("wait");
