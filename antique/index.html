@@ -14,7 +14,7 @@
     <meta property="og:image" content="assets/film-poster.jpg" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="assets/fonts/fraunces-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=a302461" />
+    <link rel="stylesheet" href="styles.css?v=afb61b6" />
   </head>
   <body>
     <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
@@ -160,6 +160,7 @@
           <button type="button" role="tab" id="tab-home" aria-controls="view-home" aria-selected="true" data-i18n="panel.home">Home</button>
           <button type="button" role="tab" id="tab-focus" aria-controls="view-focus" aria-selected="false" tabindex="-1" data-i18n="panel.focus">Focus</button>
           <button type="button" role="tab" id="tab-prayer" aria-controls="view-prayer" aria-selected="false" tabindex="-1" data-i18n="panel.prayer">Prayer times</button>
+          <button type="button" role="tab" id="tab-tools" aria-controls="view-tools" aria-selected="false" tabindex="-1" data-i18n="panel.tools">Tools</button>
         </div>
 
         <div class="views">
@@ -175,12 +176,16 @@
             <img src="assets/panel-prayer.png" width="440" height="278" loading="lazy" alt="" data-i18n-alt="panel.prayerAlt" />
             <figcaption data-i18n="panel.prayerText">Prayer times for your city, a reminder before each one, and an adzan sound you choose.</figcaption>
           </figure>
+          <figure class="view" role="tabpanel" id="view-tools" aria-labelledby="tab-tools" hidden>
+            <img src="assets/panel-tools.png" width="440" height="272" loading="lazy" alt="" data-i18n-alt="panel.toolsAlt" />
+            <figcaption data-i18n="panel.toolsText">A to-do list, quick notes, a calculator, clipboard history, a timer and a unit and currency converter, right under the notch.</figcaption>
+          </figure>
         </div>
 
         <p class="panel-more" data-i18n="panel.more">
           There are pages for music with synced lyrics, the weather, and notifications too.
         </p>
-        <p class="note" data-i18n="panel.note">Screenshots from the app. Its interface is in Indonesian for now.</p>
+        <p class="note" data-i18n="panel.note">Screenshots from the app in Indonesian. It speaks English too.</p>
       </section>
 
       <section class="platforms" aria-labelledby="platforms-title">
@@ -264,6 +269,6 @@
       <p><a href="#top" data-i18n="foot.top">Back to top</a></p>
     </footer>
 
-    <script src="main.js?v=a302461" defer></script>
+    <script src="main.js?v=afb61b6" defer></script>
   </body>
 </html>

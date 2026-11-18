@@ -103,6 +103,11 @@
         <li><b>Isi notifikasi aplikasi lain</b> (mis. WhatsApp), hanya untuk ditampilkan sesaat di notch, lalu dilupakan.</li>
         <li><b>Suara musik</b> yang diputar, dianalisis sesaat untuk equalizer. Tidak direkam dan tidak disimpan.</li>
         <li><b>Pengaturan, timer, dan lisensi</b> disimpan di folder data aplikasi di perangkatmu.</li>
+        <li><b>Tugas dan catatan</b> di halaman Alat disimpan di folder data aplikasi di perangkatmu.</li>
+        <li>
+          <b>Riwayat clipboard</b> hanya disimpan di memori dan hilang saat Antique ditutup. Isi yang ditandai
+          rahasia oleh pengelola kata sandi tidak direkam. Bisa dimatikan di Alat → Klip.
+        </li>
       </ul>
 
       <h2>Yang dikirim ke layanan lain</h2>
@@ -114,6 +119,10 @@
         <li>
           <b>Lirik:</b> judul, artis, album, dan durasi lagu yang sedang diputar dikirim ke
           <a href="https://lrclib.net/">LRCLIB</a> untuk mencari lirik.
+        </li>
+        <li>
+          <b>Kurs mata uang:</b> saat konversi mata uang dibuka, Antique mengambil kurs harian dari
+          <a href="https://www.exchangerate-api.com/">ExchangeRate-API</a>. Tidak ada data darimu yang ikut dikirim.
         </li>
         <li><b>Pembaruan:</b> Antique memeriksa versi baru di GitHub. Ini bisa dimatikan di Pengaturan → Tentang.</li>
       </ul>
@@ -135,11 +144,14 @@
         <p>
           Antique has no accounts, ads, or trackers, and no server of its own that receives your personal
           data. Your exact location (for prayer times), the content of other apps' notifications, and the
-          audio used for the equalizer stay on your device and are not stored.
+          audio used for the equalizer stay on your device and are not stored. Tasks and notes are saved in
+          the app's data folder; clipboard history lives in memory only, skips content marked secret by password
+          managers, and is gone when Antique quits.
         </p>
         <p>
           Antique sends: rounded coordinates (about 10 km) to MET Norway for the weather forecast; the title,
-          artist, album and length of the song playing to LRCLIB for lyrics; and update checks to GitHub
+          artist, album and length of the song playing to LRCLIB for lyrics; a request for daily exchange
+          rates to ExchangeRate-API when you convert currencies; and update checks to GitHub
           (can be turned off in Settings → About). These services see your IP address like any website and
           follow their own privacy policies.
         </p>
