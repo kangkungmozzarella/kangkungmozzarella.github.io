@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Unduhan Antique</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+<style>
+  /* Halaman pemilik: angka unduhan dari rilis GitHub, dibaca langsung dari API publik GitHub
+     setiap kali dibuka. Satu kolom, angka besar di atas, rincian per file di bawah. */
+  @font-face {
+    font-family: "Fraunces";
+    src: url("../assets/fonts/fraunces-latin-600-normal.woff2") format("woff2");
+    font-weight: 600;
+    font-display: swap;
+  }
+
+  :root {
+    --bg: #0e0907;
+    --card: #17100c;
+    --line: rgb(255 246 228 / 0.1);
+    --fg: #fff6e4;
+    --muted: #b9a58b;
+    --amber: #ff9b3d;
+    --mac: #ff9b3d;
+    --win: #7fb6ff;
+    --good: #7ad39a;
+    --bad: #ff7a6b;
+    --display: "Fraunces", Georgia, serif;
+    --body: -apple-system, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.5 var(--body);
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding-block: 40px 64px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  h1 {
+    margin: 0;
+    font: 600 clamp(30px, 6vw, 44px) / 1.05 var(--display);
+    text-wrap: balance;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--amber);
+  }
+
+  .sub {
+    margin: 6px 0 0;
+    color: var(--muted);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  button {
+    padding: 8px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--fg);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  button:hover {
+    border-color: rgb(255 246 228 / 0.25);
+  }
+
+  button:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  .error {
+    margin-top: 24px;
+    padding: 14px 18px;
+    border: 1px solid color-mix(in srgb, var(--bad) 40%, transparent);
+    border-radius: 14px;
+    color: var(--fg);
+    background: color-mix(in srgb, var(--bad) 10%, transparent);
+  }
+
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .figure {
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--card);
+  }
+
+  .figure .label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+
+  .figure .value {
+    margin-top: 6px;
+    transform-origin: left center;
+    font: 600 40px/1 var(--display);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .figure.total .value {
+    color: var(--amber);
+  }
+
+  .figure .delta {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .delta.up {
+    color: var(--good);
+  }
+
+  .split {
+    margin-top: 20px;
+  }
+
+  .bar {
+    display: flex;
+    height: 12px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--line);
+  }
+
+  .bar i {
+    display: block;
+    height: 100%;
+    transition: width 300ms ease;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  h2 {
+    margin: 44px 0 12px;
+    font: 600 22px/1.2 var(--display);
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  th,
+  td {
+    padding: 11px 16px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  th {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+  }
+
+  tbody tr + tr td {
+    border-top: 1px solid var(--line);
+  }
+
+  td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  th.num {
+    text-align: right;
+  }
+
+  .file {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 13px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: var(--line);
+    color: var(--muted);
+  }
+
+  .tag.mac {
+    color: var(--mac);
+    background: color-mix(in srgb, var(--mac) 14%, transparent);
+  }
+
+  .tag.win {
+    color: var(--win);
+    background: color-mix(in srgb, var(--win) 14%, transparent);
+  }
+
+  .log {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 16px 20px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    list-style: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .log li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 16px;
+  }
+
+  .log b {
+    color: var(--good);
+  }
+
+  .log .empty {
+    color: var(--muted);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bump {
+      animation: bump 0.7s ease-out;
+    }
+
+    @keyframes bump {
+      from {
+        color: var(--good);
+        transform: scale(1.06);
+      }
+    }
+  }
+
+  .notes {
+    display: grid;
+    gap: 8px;
+    margin: 36px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 68ch;
+  }
+
+  .notes a {
+    color: var(--fg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bar i {
+      transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Unduhan <em>Antique</em></h1>
+      <p class="sub" id="release-line">Memuat data rilis…</p>
+    </div>
+    <div class="actions">
+      <span id="fetched-at"></span>
+      <button type="button" id="refresh">Muat ulang</button>
+    </div>
+  </header>
+
+  <div class="error" id="error" hidden></div>
+
+  <section class="figures" aria-label="Ringkasan">
+    <div class="figure total">
+      <div class="label">Total unduhan installer</div>
+      <div class="value" id="total">—</div>
+      <div class="delta" id="total-delta"></div>
+    </div>
+    <div class="figure">
+      <div class="label"><span class="dot" style="background: var(--mac)"></span>macOS</div>
+      <div class="value" id="mac">—</div>
+      <div class="delta" id="mac-delta"></div>
+    </div>
+    <div class="figure">
+      <div class="label"><span class="dot" style="background: var(--win)"></span>Windows</div>
+      <div class="value" id="win">—</div>
+      <div class="delta" id="win-delta"></div>
+    </div>
+    <div class="figure">
+      <div class="label">Pemeriksaan update (Windows)</div>
+      <div class="value" id="checks">—</div>
+      <div class="delta" id="checks-delta"></div>
+    </div>
+  </section>
+
+  <section class="split" aria-label="Perbandingan macOS dan Windows">
+    <div class="bar"><i id="bar-mac" style="width: 0; background: var(--mac)"></i><i id="bar-win" style="width: 0; background: var(--win)"></i></div>
+    <div class="legend"><span id="share-mac">macOS</span><span id="share-win">Windows</span></div>
+  </section>
+
+  <h2>Per file</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>File</th><th>Rilis</th><th>Jenis</th><th class="num">Unduhan</th><th class="num">Ukuran</th><th>Dihitung sejak</th></tr>
+      </thead>
+      <tbody id="files"><tr><td colspan="6">Memuat…</td></tr></tbody>
+    </table>
+  </div>
+
+  <h2>Unduhan baru yang terlihat dari browser ini</h2>
+  <ol class="log" id="log" aria-live="polite"><li class="empty">Belum ada. Setiap kali angkanya naik selama halaman ini terbuka, catatannya muncul di sini.</li></ol>
+
+  <ul class="notes">
+    <li>Angka dibaca langsung dari GitHub dan diperbarui otomatis setiap 2 menit selama halaman ini terbuka, juga setiap kali tab ini dibuka lagi. GitHub sendiri bisa tertunda beberapa menit.</li>
+    <li>GitHub menghitung setiap kali file diunduh, termasuk unduhan ulang dan uji coba sendiri.</li>
+    <li><b>Hitungan sebuah file kembali ke 0 setiap kali file itu diganti di rilis.</b> "Dihitung sejak" menunjukkan kapan file terakhir diunggah. Supaya hitungan tidak hilang, rilis perubahan berikutnya sebagai versi baru (mis. 0.1.1).</li>
+    <li>"Pemeriksaan update" = berapa kali aplikasi Windows mengecek versi baru (<span class="file">latest.json</span>), kira-kira menggambarkan seberapa sering aplikasi yang terpasang dibuka. Mac belum punya update otomatis.</li>
+    <li>"Sejak kamu buka terakhir" dan catatan unduhan baru disimpan di browser ini saja.</li>
+  </ul>
+</div>
+
+<script>
+  "use strict";
+  const API = "https://api.github.com/repos/kangkungmozzarella/antique-releases/releases?per_page=100";
+  const STORE_KEY = "antique-stats-last";
+  const LOG_KEY = "antique-stats-log";
+  /** Jeda pembaruan otomatis. GitHub mengizinkan 60 permintaan per jam tanpa login. */
+  const EVERY = 120_000;
+  /** Jumlah terakhir yang tampil di halaman ini (untuk catatan & animasi saat naik). */
+  let shown = null;
+  /** Patokan "sejak kamu buka terakhir": dibaca sekali saat halaman dibuka. */
+  const visitBaseline = loadJson(STORE_KEY);
+  const $ = (id) => document.getElementById(id);
+  const fmt = new Intl.NumberFormat("id-ID");
+  const fmtDate = new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+  /** Jenis file: installer Mac/Windows, pemeriksaan update, atau pendukung (tidak dihitung). */
+  function kind(name) {
+    if (name.endsWith(".dmg")) return "mac";
+    if (name.endsWith(".exe")) return "win";
+    if (name === "latest.json") return "update";
+    return "other";
+  }
+
+  const KIND_LABEL = { mac: "macOS", win: "Windows", update: "Cek update", other: "Pendukung" };
+
+  function size(bytes) {
+    if (bytes >= 1e6) return `${(bytes / 1e6).toFixed(1).replace(".", ",")} MB`;
+    return bytes >= 1e3 ? `${Math.round(bytes / 1e3)} KB` : `${bytes} B`;
+  }
+
+  function loadJson(key, fallback = null) {
+    try {
+      return JSON.parse(localStorage.getItem(key) ?? "null") ?? fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function saveJson(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      /* Penyimpanan browser tidak tersedia: selisih & catatan tidak disimpan, halaman tetap jalan. */
+    }
+  }
+
+  let log = loadJson(LOG_KEY, []);
+
+  function renderLog() {
+    const list = $("log");
+    if (!log.length) return;
+    list.replaceChildren();
+    for (const entry of log.slice(-30).reverse()) {
+      const li = document.createElement("li");
+      const when = document.createElement("span");
+      when.textContent = fmtDate.format(new Date(entry.t));
+      const what = document.createElement("span");
+      const parts = [];
+      if (entry.mac) parts.push(`macOS +${fmt.format(entry.mac)}`);
+      if (entry.win) parts.push(`Windows +${fmt.format(entry.win)}`);
+      const b = document.createElement("b");
+      b.textContent = parts.join(" · ");
+      what.append(b);
+      li.append(when, what);
+      list.append(li);
+    }
+  }
+
+  function bump(el) {
+    el.classList.remove("bump");
+    void el.offsetWidth;
+    el.classList.add("bump");
+  }
+
+  /** Selisih per jenis sejak kunjungan terakhir, hanya dari file yang sama (id aset sama). */
+  function deltas(assets, last) {
+    const result = { mac: 0, win: 0, update: 0 };
+    if (!last) return null;
+    for (const asset of assets) {
+      const before = last.counts[asset.id];
+      const k = kind(asset.name);
+      if (before !== undefined && k in result) result[k] += Math.max(0, asset.download_count - before);
+    }
+    return result;
+  }
+
+  function showDelta(el, value, last) {
+    if (!last) {
+      el.textContent = "";
+      el.className = "delta";
+      return;
+    }
+    el.textContent = value > 0 ? `+${fmt.format(value)} sejak kamu buka terakhir` : "Belum ada yang baru sejak kamu buka terakhir";
+    el.className = value > 0 ? "delta up" : "delta";
+  }
+
+  function render(releases) {
+    const published = releases.filter((r) => !r.draft);
+    const assets = published.flatMap((r) => r.assets.map((a) => ({ ...a, tag: r.tag_name })));
+    const sum = (k) => assets.filter((a) => kind(a.name) === k).reduce((n, a) => n + a.download_count, 0);
+    const mac = sum("mac");
+    const win = sum("win");
+    const checks = sum("update");
+
+    const latest = published[0];
+    $("release-line").textContent = latest
+      ? `${published.length} rilis terbit · terbaru ${latest.tag_name}, ${fmtDate.format(new Date(latest.published_at))}`
+      : "Belum ada rilis yang terbit.";
+
+    $("total").textContent = fmt.format(mac + win);
+    $("mac").textContent = fmt.format(mac);
+    $("win").textContent = fmt.format(win);
+    $("checks").textContent = fmt.format(checks);
+
+    const last = visitBaseline;
+    const d = deltas(assets, last);
+
+    // Naik selama halaman terbuka: catat dan beri tanda.
+    if (shown && (mac > shown.mac || win > shown.win)) {
+      log.push({ t: Date.now(), mac: Math.max(0, mac - shown.mac), win: Math.max(0, win - shown.win) });
+      log = log.slice(-200);
+      saveJson(LOG_KEY, log);
+      bump($("total"));
+      if (mac > shown.mac) bump($("mac"));
+      if (win > shown.win) bump($("win"));
+      renderLog();
+    }
+    if (shown && checks > shown.checks) bump($("checks"));
+    shown = { mac, win, checks };
+    showDelta($("total-delta"), d ? d.mac + d.win : 0, d);
+    showDelta($("mac-delta"), d ? d.mac : 0, d);
+    showDelta($("win-delta"), d ? d.win : 0, d);
+    showDelta($("checks-delta"), d ? d.update : 0, d);
+
+    const both = mac + win;
+    const macShare = both ? Math.round((mac / both) * 100) : 0;
+    $("bar-mac").style.width = both ? `${macShare}%` : "0";
+    $("bar-win").style.width = both ? `${100 - macShare}%` : "0";
+    $("share-mac").textContent = both ? `macOS ${macShare}%` : "macOS";
+    $("share-win").textContent = both ? `Windows ${100 - macShare}%` : "Windows";
+
+    const order = { mac: 0, win: 1, update: 2, other: 3 };
+    const rows = [...assets].sort((a, b) => order[kind(a.name)] - order[kind(b.name)] || b.download_count - a.download_count);
+    const body = $("files");
+    body.replaceChildren();
+    for (const asset of rows) {
+      const tr = document.createElement("tr");
+      const k = kind(asset.name);
+      const cells = [
+        [asset.name, "file"],
+        [asset.tag, ""],
+        [KIND_LABEL[k], ""],
+        [fmt.format(asset.download_count), "num"],
+        [size(asset.size), "num"],
+        [fmtDate.format(new Date(asset.updated_at)), ""],
+      ];
+      cells.forEach(([text, cls], i) => {
+        const td = document.createElement("td");
+        if (cls) td.className = cls;
+        if (i === 2) {
+          const tag = document.createElement("span");
+          tag.className = `tag ${k}`;
+          tag.textContent = text;
+          td.append(tag);
+        } else {
+          td.textContent = text;
+        }
+        tr.append(td);
+      });
+      body.append(tr);
+    }
+    if (!rows.length) body.innerHTML = '<tr><td colspan="6">Belum ada file.</td></tr>';
+
+    saveJson(STORE_KEY, { at: Date.now(), counts: Object.fromEntries(assets.map((a) => [a.id, a.download_count])) });
+  }
+
+  async function load() {
+    const button = $("refresh");
+    button.disabled = true;
+    $("error").hidden = true;
+    try {
+      const response = await fetch(API, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
+      if (response.status === 403 || response.status === 429) {
+        const reset = Number(response.headers.get("x-ratelimit-reset")) * 1000;
+        const when = reset ? ` Coba lagi setelah ${new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit" }).format(new Date(reset))}.` : "";
+        throw new Error(`GitHub membatasi 60 permintaan per jam dari satu jaringan, dan batasnya sudah habis.${when}`);
+      }
+      if (!response.ok) throw new Error(`GitHub menjawab ${response.status}. Coba muat ulang sebentar lagi.`);
+      render(await response.json());
+      $("fetched-at").textContent = `Diambil ${new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date())}`;
+    } catch (error) {
+      const message = error instanceof TypeError ? "Tidak bisa menghubungi GitHub. Periksa koneksi internet, lalu muat ulang." : error.message;
+      $("error").textContent = message;
+      $("error").hidden = false;
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  $("refresh").addEventListener("click", load);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) load();
+  });
+  setInterval(() => {
+    if (!document.hidden) load();
+  }, EVERY);
+  renderLog();
+  load();
+</script>
+</body>
+</html>
