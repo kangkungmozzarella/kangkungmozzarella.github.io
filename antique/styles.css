@@ -240,7 +240,8 @@ h3 {
 }
 
 .lang,
-.os {
+.os,
+.seg {
   display: flex;
   padding: 3px;
   border: 1px solid var(--line);
@@ -248,7 +249,8 @@ h3 {
 }
 
 .lang button,
-.os button {
+.os button,
+.seg button {
   min-width: 44px;
   min-height: 36px;
   padding: 0 10px;
@@ -263,7 +265,8 @@ h3 {
 }
 
 .lang button[aria-pressed="true"],
-.os button[aria-pressed="true"] {
+.os button[aria-pressed="true"],
+.seg button[aria-pressed="true"] {
   background: rgb(255 246 228 / 0.1);
   color: var(--cream);
 }
@@ -493,8 +496,9 @@ h3 {
   top: 0;
   left: 50%;
   width: 0;
-  transform: scale(var(--u));
+  transform: scale(calc(var(--u) * var(--size, 1)));
   transform-origin: 0 0;
+  transition: transform 420ms var(--spring);
 }
 
 /* Width = left wing + centre + right wing. The shift keeps the centre (camera on a Mac,
@@ -928,6 +932,84 @@ h3 {
   color: var(--muted);
 }
 
+/* ---------- Customisation on the stage ---------- */
+
+.custom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 22px;
+  margin: 0 0 22px;
+}
+
+.custom .os {
+  margin-top: 0;
+}
+
+.custom-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.custom-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Shape and size are the Windows settings; on a Mac the notch wraps the camera. */
+.custom[data-os="mac"] .win-only {
+  display: none;
+}
+
+.seg button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.seg button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.swatch-lentera {
+  background: radial-gradient(#ffd98a, #e8701a 55%, #7a2604);
+}
+
+.swatch-lumen {
+  background: radial-gradient(#e9fbff, #4fb8f0 50%, #0b3f78);
+}
+
+.swatch-bara {
+  background: radial-gradient(#ff8a66, #e3161c 55%, #5e0410);
+}
+
+.swatch-neko {
+  background: radial-gradient(#f6ffc2, #bfe24a 45%, #4f7410);
+}
+
+/* Floating shape (Windows): a small island just below the top edge. */
+.device[data-shape="floating"][data-os="windows"] .island-holder {
+  top: calc(var(--u) * 9px);
+}
+
+.device[data-shape="floating"][data-os="windows"] .island {
+  border-radius: var(--r);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.35);
+}
+
+.device[data-shape="floating"][data-os="windows"] .island::before,
+.device[data-shape="floating"][data-os="windows"] .island::after {
+  display: none;
+}
+
 /* ---------- More eyes ---------- */
 
 .more-eyes {
@@ -957,6 +1039,8 @@ h3 {
 
 .iris-row {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 28px;
 }
 
@@ -965,6 +1049,24 @@ h3 {
   justify-items: center;
   gap: 10px;
   margin: 0;
+  padding: 14px 10px;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.iris:hover,
+.iris[aria-pressed="true"] {
+  border-color: var(--line);
+  background: rgb(255 246 228 / 0.04);
+}
+
+.iris-eye {
+  display: block;
 }
 
 .iris .eye {
@@ -972,7 +1074,7 @@ h3 {
   height: 88px;
 }
 
-.iris figcaption {
+.iris-name {
   font-family: var(--display);
   font-size: 17px;
   color: var(--cream);
@@ -1155,7 +1257,7 @@ h3 {
   }
 
   .iris-row {
-    gap: 18px;
+    gap: 6px;
   }
 
   .iris .eye {

@@ -14,7 +14,7 @@
     <meta property="og:image" content="assets/film-poster.jpg" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="assets/fonts/fraunces-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=4f1c081" />
+    <link rel="stylesheet" href="styles.css?v=444dda1" />
   </head>
   <body>
     <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
@@ -72,6 +72,36 @@
         </div>
         <p class="try-caption" id="try-caption" aria-live="polite"></p>
 
+        <!-- Screen and customisation, right above the stage so the notch stays in view: eye style,
+             shape and size (shape & size are the Windows settings). -->
+        <div class="custom" id="custom" data-os="mac">
+          <div class="custom-group">
+            <span class="custom-label" id="custom-screen" data-i18n="custom.screen">Screen</span>
+            <div class="os" role="group" aria-labelledby="custom-screen">
+              <button type="button" data-os="mac" aria-pressed="true">macOS</button>
+              <button type="button" data-os="windows" aria-pressed="false">Windows</button>
+            </div>
+          </div>
+          <div class="custom-group">
+            <span class="custom-label" id="custom-eyes" data-i18n="custom.eyes">Eyes</span>
+            <div class="seg themes" id="theme-pick" role="group" aria-labelledby="custom-eyes"></div>
+          </div>
+          <div class="custom-group win-only">
+            <span class="custom-label" id="custom-shape" data-i18n="custom.shape">Shape</span>
+            <div class="seg" role="group" aria-labelledby="custom-shape">
+              <button type="button" data-shape="notch" aria-pressed="true" data-i18n="custom.notch">Notch</button>
+              <button type="button" data-shape="floating" aria-pressed="false" data-i18n="custom.floating">Floating</button>
+            </div>
+          </div>
+          <div class="custom-group win-only">
+            <span class="custom-label" id="custom-size" data-i18n="custom.size">Size</span>
+            <div class="seg" role="group" aria-labelledby="custom-size">
+              <button type="button" data-size="-1" data-i18n-label="custom.smaller" aria-label="Smaller">−</button>
+              <button type="button" data-size="1" data-i18n-label="custom.bigger" aria-label="Bigger">+</button>
+            </div>
+          </div>
+        </div>
+
         <div class="device" id="device" data-os="mac">
           <div class="screen" id="screen">
             <div class="wallpaper" aria-hidden="true">
@@ -114,10 +144,6 @@
           <div class="hinge" aria-hidden="true"></div>
         </div>
 
-        <div class="os" role="group" aria-label="Screen">
-          <button type="button" data-os="mac" aria-pressed="true">macOS</button>
-          <button type="button" data-os="windows" aria-pressed="false">Windows</button>
-        </div>
         <p class="try-more" data-i18n="try.more">
           It also speaks up when a drive is plugged in, the battery runs low, or rain is on the way.
         </p>
@@ -195,10 +221,13 @@
 
       <section class="more-eyes" aria-labelledby="eyes-title">
         <div class="more-eyes-text">
-          <h2 id="eyes-title" data-i18n="eyes.title">More eyes are on the way.</h2>
-          <p data-i18n="eyes.body">Antique ships with Lentera, the warm amber pair you met above. Other styles are coming soon.</p>
+          <h2 id="eyes-title" data-i18n="eyes.title">Make it yours.</h2>
+          <p data-i18n="eyes.body">
+            Four eye styles, a notch or a floating island, and a size that fits your screen. All free. Pick one to
+            try it on the screen above.
+          </p>
         </div>
-        <div class="iris-row" id="iris-row" aria-hidden="true"></div>
+        <div class="iris-row" id="iris-row"></div>
       </section>
 
       <section class="download" id="download" aria-labelledby="download-title">
@@ -229,6 +258,6 @@
       <p><a href="#top" data-i18n="foot.top">Back to top</a></p>
     </footer>
 
-    <script src="main.js?v=4f1c081" defer></script>
+    <script src="main.js?v=444dda1" defer></script>
   </body>
 </html>

@@ -92,9 +92,21 @@
       "film.title": "The launch film",
       "film.error": 'The film didn\'t load. <a href="assets/antique-launch.mp4">Open the video file</a> instead.',
       "film.caption": "28 seconds, no sound.",
-      "eyes.title": "More eyes are on the way.",
-      "eyes.body": "Antique ships with Lentera, the warm amber pair you met above. Other styles are coming soon.",
-      "eyes.soon": "Coming soon",
+      "eyes.title": "Make it yours.",
+      "eyes.body":
+        "Four eye styles, a notch or a floating island, and a size that fits your screen. All free. Pick one to try it on the screen above.",
+      "eyes.lentera": "Warm amber",
+      "eyes.lumen": "Cool blue light",
+      "eyes.bara": "Glowing ember",
+      "eyes.neko": "Cat's eye",
+      "custom.screen": "Screen",
+      "custom.eyes": "Eyes",
+      "custom.shape": "Shape",
+      "custom.notch": "Notch",
+      "custom.floating": "Floating",
+      "custom.size": "Size",
+      "custom.smaller": "Smaller",
+      "custom.bigger": "Bigger",
       "download.title": "Download Antique",
       "download.macFile": "Disk image (.dmg)",
       "download.winFile": "Installer (.exe), Windows 10 and 11",
@@ -179,9 +191,21 @@
       "film.title": "Film peluncuran",
       "film.error": 'Video gagal dimuat. <a href="assets/antique-launch.mp4">Buka file videonya</a> saja.',
       "film.caption": "28 detik, tanpa suara.",
-      "eyes.title": "Mata lain sedang disiapkan.",
-      "eyes.body": "Antique hadir dengan Lentera, sepasang mata amber yang tadi menyapamu. Gaya lain segera hadir.",
-      "eyes.soon": "Segera hadir",
+      "eyes.title": "Atur sesukamu.",
+      "eyes.body":
+        "Empat gaya mata, bentuk notch atau pulau mengambang, dan ukuran yang pas untuk layarmu. Semuanya gratis. Pilih salah satu untuk mencobanya di layar di atas.",
+      "eyes.lentera": "Amber hangat",
+      "eyes.lumen": "Cahaya biru",
+      "eyes.bara": "Bara merah",
+      "eyes.neko": "Mata kucing",
+      "custom.screen": "Layar",
+      "custom.eyes": "Mata",
+      "custom.shape": "Bentuk",
+      "custom.notch": "Notch",
+      "custom.floating": "Mengambang",
+      "custom.size": "Ukuran",
+      "custom.smaller": "Lebih kecil",
+      "custom.bigger": "Lebih besar",
       "download.title": "Unduh Antique",
       "download.macFile": "Disk image (.dmg)",
       "download.winFile": "Installer (.exe), Windows 10 dan 11",
@@ -527,6 +551,8 @@
       island.style.setProperty("--wl", showActivity ? `${PAD + ICON_W + 6}px` : "20px");
       island.style.setProperty("--wr", showActivity ? `${Math.ceil(PAD + 6 + textW)}px` : "20px");
     }
+    // Size (Windows): the whole notch grows or shrinks, like the size setting in the app.
+    holder.style.setProperty("--size", os === "windows" && current !== "open" ? String(SIZES[size]) : "1");
     // The open panel has fixed sizes in CSS; inline wing widths must not override them.
     if (current === "open") {
       island.style.removeProperty("--wl");
@@ -545,9 +571,60 @@
     renderIsland();
   }
 
+  /* Customisation: eye style, shape and size, like the app's appearance settings. */
+  const holder = island.parentElement;
+  const THEMES = [
+    ["lentera", "Lentera"],
+    ["lumen", "Lumen"],
+    ["bara", "Bara"],
+    ["neko", "Neko"],
+  ];
+  const SIZES = [0.85, 1, 1.15, 1.3];
+  let size = 1;
+  const themePick = document.getElementById("theme-pick");
+
+  for (const [key, name] of THEMES) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.theme = key;
+    button.setAttribute("aria-pressed", String(key === "lentera"));
+    button.innerHTML = `<i class="swatch swatch-${key}" aria-hidden="true"></i>${name}`;
+    button.addEventListener("click", () => setTheme(key));
+    themePick.append(button);
+  }
+
+  function setTheme(next) {
+    eyesHost.replaceChildren();
+    pair[0] = createEye(eyesHost, "left", next);
+    pair[1] = createEye(eyesHost, "right", next);
+    document.querySelectorAll("[data-theme]").forEach((el) => {
+      if (el.tagName === "BUTTON") el.setAttribute("aria-pressed", String(el.dataset.theme === next));
+    });
+  }
+
+  function setShape(next) {
+    device.dataset.shape = next;
+    document.querySelectorAll("button[data-shape]").forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.shape === next));
+    });
+  }
+
+  document.querySelectorAll("button[data-shape]").forEach((button) => {
+    button.addEventListener("click", () => setShape(button.dataset.shape));
+  });
+  document.querySelectorAll("button[data-size]").forEach((button) => {
+    button.addEventListener("click", () => {
+      size = Math.min(SIZES.length - 1, Math.max(0, size + Number(button.dataset.size)));
+      document.querySelector('button[data-size="-1"]').disabled = size === 0;
+      document.querySelector('button[data-size="1"]').disabled = size === SIZES.length - 1;
+      renderIsland();
+    });
+  });
+
   function setOs(next) {
     os = next;
     device.dataset.os = next;
+    document.getElementById("custom").dataset.os = next;
     document.querySelectorAll("[data-os]").forEach((button) => {
       if (button.tagName === "BUTTON") button.setAttribute("aria-pressed", String(button.dataset.os === next));
     });
@@ -616,22 +693,31 @@
   );
   addEventListener("keydown", () => (look.lastInput = performance.now()));
 
-  /* ---------------- Coming-soon eye styles ---------------- */
+  /* ---------------- Eye styles ---------------- */
 
+  // Each style is a button: it puts that style on the stage and scrolls back up to it.
   const irisRow = document.getElementById("iris-row");
-  const showcase = [
-    ["lumen", "Lumen"],
-    ["bara", "Bara"],
-    ["neko", "Neko"],
-  ].map(([iris, name]) => {
-    const figure = document.createElement("figure");
-    figure.className = "iris";
-    const eyeHost = document.createElement("div");
-    const label = document.createElement("figcaption");
+  const showcase = THEMES.map(([iris, name]) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "iris";
+    button.dataset.theme = iris;
+    button.setAttribute("aria-pressed", String(iris === "lentera"));
+    const eyeHost = document.createElement("span");
+    eyeHost.className = "iris-eye";
+    const label = document.createElement("span");
+    label.className = "iris-name";
     label.textContent = name;
-    label.append(document.createElement("small"));
-    figure.append(eyeHost, label);
-    irisRow.append(figure);
+    const note = document.createElement("small");
+    note.dataset.theme = iris;
+    note.textContent = t(`eyes.${iris}`);
+    label.append(note);
+    button.append(eyeHost, label);
+    button.addEventListener("click", () => {
+      setTheme(iris);
+      document.getElementById("try").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+    });
+    irisRow.append(button);
     return createEye(eyeHost, "left", iris);
   });
 
@@ -861,7 +947,7 @@
     });
     document.querySelectorAll("[data-i18n-alt]").forEach((el) => (el.alt = t(el.dataset.i18nAlt)));
     document.querySelectorAll("[data-i18n-label]").forEach((el) => el.setAttribute("aria-label", t(el.dataset.i18nLabel)));
-    document.querySelectorAll(".iris small").forEach((el) => (el.textContent = t("eyes.soon")));
+    document.querySelectorAll(".iris small").forEach((el) => (el.textContent = t(`eyes.${el.dataset.theme}`)));
     document.querySelectorAll("[data-lang]").forEach((button) => {
       button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
     });
