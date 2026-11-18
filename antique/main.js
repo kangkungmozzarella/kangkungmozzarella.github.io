@@ -51,7 +51,7 @@
       "chip.prayer": "Prayer",
       "chip.sleepy": "Sleepy",
       "chip.open": "Open",
-      "cap.rest": "When nothing is happening, it just watches. Move your pointer around.",
+      "cap.rest": "When nothing is happening, it just watches and keeps the time. Move your pointer around.",
       "cap.music": "A song is playing: the cover on one side, the beat on the other, and the pupils pulse along.",
       "cap.message": "A message arrives. The eyes step aside for a moment so you can read who it's from and what it says.",
       "cap.charge": "Charger in, and it smiles. Pull the plug and it jumps.",
@@ -160,7 +160,7 @@
       "chip.prayer": "Sholat",
       "chip.sleepy": "Ngantuk",
       "chip.open": "Buka",
-      "cap.rest": "Saat tidak ada apa-apa, dia cuma memperhatikan. Coba gerakkan kursormu.",
+      "cap.rest": "Saat tidak ada apa-apa, dia cuma memperhatikan sambil menunjukkan jam. Coba gerakkan kursormu.",
       "cap.music": "Lagu diputar: sampul di satu sisi, ketukan di sisi lain, dan pupilnya ikut berdenyut.",
       "cap.message": "Pesan masuk. Matanya menyingkir sebentar supaya kamu bisa membaca pengirim dan isinya.",
       "cap.charge": "Charger dicolok, dia tersenyum. Dicabut, dia kaget.",
@@ -548,6 +548,11 @@
     return measureCanvas.measureText(text).width;
   }
 
+  /** The island's clock, as the app shows it: 24-hour, 21.10 in Indonesian, 21:10 in English. */
+  function islandTime() {
+    return new Date().toLocaleTimeString(lang === "id" ? "id-ID" : "en-GB", { hour: "2-digit", minute: "2-digit" });
+  }
+
   const ICON_W = 18;
   const GAP = 6;
   const PAD = 14;
@@ -571,6 +576,10 @@
             ? textWidth("25:00")
             : 0;
     const showActivity = current !== "rest" && current !== "sleepy" && current !== "open";
+    // At rest the app shows a small clock: right of the camera on a Mac, right of the eyes on Windows.
+    const clock = current === "rest" ? islandTime() : "";
+    const clockHtml = `<span class="label idle-clock">${clock}</span>`;
+    const clockW = clock ? Math.ceil(textWidth(clock)) : 0;
 
     wingLeft.replaceChildren();
     wingRight.replaceChildren();
@@ -584,6 +593,7 @@
       else wingLeft.append(eyesHost);
       centre.append(lens);
       if (showActivity) wingRight.innerHTML = spec.quiet ? textHtml : spec.icon + textHtml;
+      else if (clock) wingRight.innerHTML = clockHtml;
       island.style.setProperty("--wl", "62px");
       const iconW = spec.quiet ? 0 : ICON_W + GAP;
       // The camera stays centred, so the right wing can't run past the screen edge.
@@ -602,9 +612,15 @@
       if (showActivity) {
         wingLeft.innerHTML = spec.icon;
         if (!spec.quiet) wingRight.innerHTML = textHtml;
+      } else if (clock) {
+        // The eyes move left and the clock sits on the right.
+        wingRight.innerHTML = clockHtml;
       }
       island.style.setProperty("--wl", showActivity ? `${PAD + ICON_W + 6}px` : "20px");
-      island.style.setProperty("--wr", showActivity && !spec.quiet ? `${Math.ceil(PAD + 6 + textW)}px` : `${PAD}px`);
+      island.style.setProperty(
+        "--wr",
+        showActivity && !spec.quiet ? `${Math.ceil(PAD + 6 + textW)}px` : clock ? `${PAD + 10 + clockW}px` : `${PAD}px`,
+      );
     }
     // Size (Windows): the whole notch grows or shrinks, like the size setting in the app.
     holder.style.setProperty("--size", os === "windows" && current !== "open" ? String(SIZES[size]) : "1");
@@ -698,11 +714,13 @@
     }
   });
 
-  /* Clock on the fake menu bar / taskbar. */
+  /* Clock on the fake menu bar / taskbar, and the island's own clock at rest. */
   function tick() {
     const time = new Date().toLocaleTimeString(lang === "id" ? "id-ID" : "en-US", { hour: "2-digit", minute: "2-digit" });
     document.getElementById("mb-clock").textContent = time;
     document.getElementById("tb-clock").textContent = time;
+    const idle = island.querySelector(".idle-clock");
+    if (idle) idle.textContent = islandTime();
   }
   setInterval(tick, 15000);
 
