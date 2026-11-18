@@ -14,7 +14,7 @@
     <meta property="og:image" content="assets/film-poster.jpg" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="assets/fonts/fraunces-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=444dda1" />
+    <link rel="stylesheet" href="styles.css?v=a302461" />
   </head>
   <body>
     <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
@@ -235,13 +235,19 @@
         <div class="downloads">
           <div class="dl" data-platform="mac">
             <h3>macOS</h3>
-            <p data-i18n="download.macFile">Disk image (.dmg)</p>
+            <p data-i18n="download.macFile">Disk image (.dmg), macOS 12 or later, Apple Silicon and Intel</p>
             <a class="button primary" data-download="mac" href="#download">Download for macOS</a>
+            <p class="dl-note" data-i18n="download.macNote">
+              First launch: if macOS blocks it, open System Settings, Privacy &amp; Security, and choose Open Anyway.
+            </p>
           </div>
           <div class="dl" data-platform="windows">
             <h3>Windows</h3>
             <p data-i18n="download.winFile">Installer (.exe), Windows 10 and 11</p>
             <a class="button primary" data-download="windows" href="#download">Download for Windows</a>
+            <p class="dl-note" data-i18n="download.winNote">
+              First launch: if Windows shows SmartScreen, choose More info, then Run anyway.
+            </p>
           </div>
         </div>
         <p class="meta"><span data-i18n="meta.version">Version</span> <span class="version">0.1.0</span></p>
@@ -258,6 +264,6 @@
       <p><a href="#top" data-i18n="foot.top">Back to top</a></p>
     </footer>
 
-    <script src="main.js?v=444dda1" defer></script>
+    <script src="main.js?v=a302461" defer></script>
   </body>
 </html>

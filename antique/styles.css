@@ -1091,6 +1091,13 @@ h3 {
 
 /* ---------- Download ---------- */
 
+.dl-note {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
 .download {
   width: var(--page);
   margin: 0 auto;

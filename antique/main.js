@@ -9,7 +9,7 @@
   // scripts/release.mjs, so this link always points to the latest published release.
   // While a value is empty, its button shows "Coming soon" and is not clickable.
   const DOWNLOADS = {
-    mac: "",
+    mac: "https://github.com/kangkungmozzarella/antique-releases/releases/latest/download/Antique-macOS.dmg",
     windows: "https://github.com/kangkungmozzarella/antique-releases/releases/latest/download/Antique-Windows-setup.exe",
   };
 
@@ -108,8 +108,10 @@
       "custom.smaller": "Smaller",
       "custom.bigger": "Bigger",
       "download.title": "Download Antique",
-      "download.macFile": "Disk image (.dmg)",
+      "download.macFile": "Disk image (.dmg), macOS 12 or later, Apple Silicon and Intel",
       "download.winFile": "Installer (.exe), Windows 10 and 11",
+      "download.macNote": "First launch: if macOS blocks it, open System Settings, Privacy & Security, and choose Open Anyway.",
+      "download.winNote": "First launch: if Windows shows SmartScreen, choose More info, then Run anyway.",
       "download.mac": "Download for macOS",
       "download.win": "Download for Windows",
       "download.soon": "Coming soon",
@@ -207,8 +209,10 @@
       "custom.smaller": "Lebih kecil",
       "custom.bigger": "Lebih besar",
       "download.title": "Unduh Antique",
-      "download.macFile": "Disk image (.dmg)",
+      "download.macFile": "Disk image (.dmg), macOS 12 atau lebih baru, Apple Silicon dan Intel",
       "download.winFile": "Installer (.exe), Windows 10 dan 11",
+      "download.macNote": "Saat pertama dibuka: bila macOS menolak, buka System Settings, Privacy & Security, lalu pilih Open Anyway.",
+      "download.winNote": "Saat pertama dibuka: bila muncul SmartScreen, pilih More info, lalu Run anyway.",
       "download.mac": "Unduh untuk macOS",
       "download.win": "Unduh untuk Windows",
       "download.soon": "Segera hadir",
