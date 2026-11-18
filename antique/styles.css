@@ -629,7 +629,48 @@ h3 {
 }
 
 .wing .label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--cream);
+}
+
+.wing .label b,
+.centre .label b {
+  font-weight: 650;
+}
+
+.centre .label {
+  color: var(--cream);
+}
+
+.centre .dim {
+  color: #b9a58b;
+  font-weight: 500;
+}
+
+/* Volume HUD: a bar that climbs like a held volume key. */
+.hudbar {
+  position: relative;
+  width: 46px;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgb(255 246 228 / 0.16);
+}
+
+.hudbar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--accent);
+  animation: hud-up 900ms steps(4, end) 200ms both;
+}
+
+@keyframes hud-up {
+  from {
+    width: 30%;
+  }
 }
 
 .wing .dim {
@@ -1279,7 +1320,8 @@ h3 {
   }
 
   .island,
-  .wing > :not(.eyes) {
+  .wing > :not(.eyes),
+  .hudbar i {
     transition-duration: 1ms;
     animation: none;
   }

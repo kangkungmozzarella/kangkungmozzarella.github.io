@@ -38,27 +38,31 @@
       "meta.soon": "Downloads open soon.",
       "try.title": "Try Antique",
       "try.group": "Show a moment",
-      "try.more": "It also speaks up when a drive is plugged in, the battery runs low, or rain is on the way.",
+      "try.more":
+        "It also speaks up when a drive is plugged in, the battery runs low, or rain is on the way. And when you play a game in full screen, it steps aside.",
       "island.label": "Antique's notch. Click to open the panel.",
       "chip.rest": "Resting",
       "chip.music": "Music",
       "chip.message": "Message",
       "chip.charge": "Charging",
       "chip.headphones": "Headphones",
+      "chip.volume": "Volume",
       "chip.focus": "Focus",
       "chip.prayer": "Prayer",
       "chip.sleepy": "Sleepy",
       "chip.open": "Open",
       "cap.rest": "When nothing is happening, it just watches. Move your pointer around.",
       "cap.music": "A song is playing: the cover on one side, the beat on the other, and the pupils pulse along.",
-      "cap.message": "A message arrives. It looks up, surprised, and shows it for a moment.",
+      "cap.message": "A message arrives. The eyes step aside for a moment so you can read who it's from and what it says.",
       "cap.charge": "Charger in, and it smiles. Pull the plug and it jumps.",
       "cap.headphones": "Headphones connect, and it lets you know which ones.",
+      "cap.volume": "Change the volume or the screen brightness, and the notch shows how far, with a bar that follows your keys.",
       "cap.focus": "During a focus session the eyes narrow and an hourglass keeps the time.",
       "cap.prayer": "Before each prayer, a short countdown in the notch.",
       "cap.sleepy": "Leave it alone for a while and it dozes off. Come back and it wakes up.",
       "cap.open": "Click the notch and it opens into a panel: the time, music, focus and the next prayer.",
-      "wing.message": "New message",
+      "wing.sender": "Mum",
+      "wing.message": "Have you eaten yet?",
       "wing.charge": "Charging",
       "wing.headphones": "Connected",
       "wing.prayer": "Maghrib · 10 min",
@@ -143,27 +147,31 @@
       "meta.soon": "Unduhan segera dibuka.",
       "try.title": "Coba Antique",
       "try.group": "Tampilkan satu momen",
-      "try.more": "Dia juga memberi tahu saat flashdisk dicolok, baterai hampir habis, atau sebentar lagi hujan.",
+      "try.more":
+        "Dia juga memberi tahu saat flashdisk dicolok, baterai hampir habis, atau sebentar lagi hujan. Saat kamu main game layar penuh, dia menyingkir.",
       "island.label": "Notch Antique. Klik untuk membuka panel.",
       "chip.rest": "Diam",
       "chip.music": "Musik",
       "chip.message": "Pesan",
       "chip.charge": "Mengisi daya",
       "chip.headphones": "Headphone",
+      "chip.volume": "Volume",
       "chip.focus": "Fokus",
       "chip.prayer": "Sholat",
       "chip.sleepy": "Ngantuk",
       "chip.open": "Buka",
       "cap.rest": "Saat tidak ada apa-apa, dia cuma memperhatikan. Coba gerakkan kursormu.",
       "cap.music": "Lagu diputar: sampul di satu sisi, ketukan di sisi lain, dan pupilnya ikut berdenyut.",
-      "cap.message": "Pesan masuk. Dia mendongak kaget dan menampilkannya sebentar.",
+      "cap.message": "Pesan masuk. Matanya menyingkir sebentar supaya kamu bisa membaca pengirim dan isinya.",
       "cap.charge": "Charger dicolok, dia tersenyum. Dicabut, dia kaget.",
       "cap.headphones": "Headphone tersambung, dan dia memberi tahu yang mana.",
+      "cap.volume": "Atur volume atau kecerahan layar, dan notch menampilkan seberapa jauh, dengan bar yang mengikuti tombolmu.",
       "cap.focus": "Selama sesi fokus matanya menyipit, dan jam pasir menjaga waktunya.",
       "cap.prayer": "Sebelum tiap waktu sholat, ada hitung mundur singkat di notch.",
       "cap.sleepy": "Ditinggal lama, dia tertidur. Begitu kamu kembali, dia bangun.",
       "cap.open": "Klik notch-nya dan dia terbuka jadi panel: jam, musik, fokus, dan sholat berikutnya.",
-      "wing.message": "Pesan baru",
+      "wing.sender": "Ibu",
+      "wing.message": "Sudah makan belum, nak?",
       "wing.charge": "Mengisi daya",
       "wing.headphones": "Tersambung",
       "wing.prayer": "Maghrib · 10 mnt",
@@ -482,9 +490,10 @@
   wingLeft.after(centre);
 
   /** Screen size the notch is drawn at; --u scales it to the real screen. */
+  let designWidth = 1000;
   function fitStage() {
     const width = screen.clientWidth;
-    const designWidth = width < 600 ? 460 : 1000;
+    designWidth = width < 600 ? 460 : 1000;
     device.style.setProperty("--u", (width / designWidth).toFixed(4));
   }
   new ResizeObserver(fitStage).observe(screen);
@@ -500,19 +509,27 @@
       '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff6e4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>',
     hourglass:
       '<svg width="10" height="16" viewBox="0 0 40 64"><path d="M9 6H31C31 18 22.5 24 21.2 32C22.5 40 31 46 31 58H9C9 46 17.5 40 18.8 32C17.5 24 9 18 9 6Z" fill="rgb(255 246 228 / .08)" stroke="rgb(255 246 228 / .5)" stroke-width="2"/><path d="M12 14H28C27 20 22 24 20 30C18 24 13 20 12 14Z" fill="#ff9b3d"/><path d="M11 56C12 50 16 47 20 46C24 47 28 50 29 56Z" fill="#ff9b3d"/><rect x="2" y="1" width="36" height="5" rx="1.6" fill="#bfa88c"/><rect x="2" y="58" width="36" height="5" rx="1.6" fill="#bfa88c"/></svg>',
+    volume:
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff6e4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>',
     mosque:
       '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ff9b3d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2.5 1.6 4 3.3 4 5.5H8C8 6.3 9.5 4.6 12 3z"/><path d="M5 21V11h14v10"/><path d="M3 21h18"/><path d="M10 21v-4a2 2 0 0 1 4 0v4"/></svg>',
   };
 
   const BARS = '<span class="bars"><i></i><i></i><i></i><i></i></span>';
+  /** Volume HUD: percent and a bar that climbs like a held volume key. */
+  const HUD_PERCENT = 64;
+  const HUD_BAR_W = 46;
+  const HUD = `<span class="label">${HUD_PERCENT}%</span><span class="hudbar"><i style="width: ${HUD_PERCENT}%"></i></span>`;
 
   /** What each state shows: an icon, a text (or a live element), and the mood of the eyes. */
   const STATES = {
     rest: { mood: "idle" },
     music: { mood: "idle", icon: ICON.art, extra: BARS },
-    message: { mood: "alert", icon: ICON.message, text: "wing.message" },
+    // A message moves the eyes aside, like the app: the sender and the text take their place.
+    message: { mood: "alert", icon: ICON.message, text: "wing.message", sender: "wing.sender", quiet: true },
     charge: { mood: "happy", icon: ICON.charge, text: "wing.charge" },
     headphones: { mood: "alert", icon: ICON.headphones, text: "wing.headphones" },
+    volume: { mood: "idle", icon: ICON.volume, extra: HUD },
     focus: { mood: "focus", icon: ICON.hourglass, extra: '<span class="label clock">25:00</span>' },
     prayer: { mood: "happy", icon: ICON.mosque, text: "wing.prayer" },
     sleepy: { mood: "sleepy" },
@@ -538,30 +555,56 @@
   function renderIsland() {
     const spec = STATES[current];
     const text = spec.text ? t(spec.text) : "";
-    const textHtml = spec.text ? `<span class="label">${text}</span>` : (spec.extra ?? "");
-    const textW = spec.text ? textWidth(text) : spec.extra === BARS ? 18 : spec.extra ? textWidth("25:00") : 0;
+    const sender = spec.sender ? t(spec.sender) : "";
+    const textHtml = spec.sender
+      ? `<span class="label"><b>${sender}</b> <span class="dim">${text}</span></span>`
+      : spec.text
+        ? `<span class="label">${text}</span>`
+        : (spec.extra ?? "");
+    const textW = spec.text
+      ? textWidth(sender ? `${sender} ${text}` : text)
+      : spec.extra === BARS
+        ? 18
+        : spec.extra === HUD
+          ? textWidth(`${HUD_PERCENT}%`) + GAP + HUD_BAR_W
+          : spec.extra
+            ? textWidth("25:00")
+            : 0;
     const showActivity = current !== "rest" && current !== "sleepy" && current !== "open";
 
     wingLeft.replaceChildren();
     wingRight.replaceChildren();
     centre.replaceChildren();
 
+    island.style.removeProperty("--c");
     if (os === "mac") {
       // Mac: eyes in the left wing, the camera in the middle, the activity on the right.
-      wingLeft.append(eyesHost);
+      // A message puts the app icon where the eyes were.
+      if (spec.quiet) wingLeft.innerHTML = spec.icon;
+      else wingLeft.append(eyesHost);
       centre.append(lens);
-      if (showActivity) wingRight.innerHTML = spec.icon + textHtml;
+      if (showActivity) wingRight.innerHTML = spec.quiet ? textHtml : spec.icon + textHtml;
       island.style.setProperty("--wl", "62px");
-      island.style.setProperty("--wr", showActivity ? `${Math.ceil(PAD * 2 + ICON_W + GAP + textW)}px` : "62px");
+      const iconW = spec.quiet ? 0 : ICON_W + GAP;
+      // The camera stays centred, so the right wing can't run past the screen edge.
+      const maxWing = designWidth / 2 - 124 / 2 - 8;
+      const wing = Math.min(maxWing, Math.ceil(PAD * 2 + iconW + textW));
+      island.style.setProperty("--wr", showActivity ? `${wing}px` : "62px");
     } else {
-      // Windows: eyes in the middle, icon on the left, text on the right.
-      centre.append(eyesHost);
+      // Windows: eyes in the middle, icon on the left, text on the right. A message puts its
+      // text in the middle instead of the eyes.
+      if (spec.quiet) {
+        centre.innerHTML = textHtml;
+        island.style.setProperty("--c", `${Math.ceil(textW + 8)}px`);
+      } else {
+        centre.append(eyesHost);
+      }
       if (showActivity) {
         wingLeft.innerHTML = spec.icon;
-        wingRight.innerHTML = textHtml;
+        if (!spec.quiet) wingRight.innerHTML = textHtml;
       }
       island.style.setProperty("--wl", showActivity ? `${PAD + ICON_W + 6}px` : "20px");
-      island.style.setProperty("--wr", showActivity ? `${Math.ceil(PAD + 6 + textW)}px` : "20px");
+      island.style.setProperty("--wr", showActivity && !spec.quiet ? `${Math.ceil(PAD + 6 + textW)}px` : `${PAD}px`);
     }
     // Size (Windows): the whole notch grows or shrinks, like the size setting in the app.
     holder.style.setProperty("--size", os === "windows" && current !== "open" ? String(SIZES[size]) : "1");
