@@ -497,10 +497,6 @@ h3 {
   transform-origin: 0 0;
 }
 
-.device[data-os="windows"] .island-holder {
-  top: calc(var(--u) * 9px);
-}
-
 /* Width = left wing + centre + right wing. The shift keeps the centre (camera on a Mac,
    eyes on Windows) at the middle of the screen while the wings grow unevenly. */
 .island {
@@ -529,19 +525,18 @@ h3 {
     transform 560ms var(--spring);
 }
 
+/* Windows: the app's default "notch" shape, hanging from the top edge (eyes in the middle). */
 .device[data-os="windows"] .island {
   --c: 52px;
   --wl: 20px;
   --wr: 20px;
   --h: 32px;
   --r: 16px;
-  border-radius: var(--r);
-  box-shadow: 0 6px 18px rgb(0 0 0 / 0.35);
 }
 
-/* A Mac notch meets the top edge with small concave shoulders. */
-.device[data-os="mac"] .island::before,
-.device[data-os="mac"] .island::after {
+/* The notch meets the top edge with small concave shoulders (Mac and Windows). */
+.island::before,
+.island::after {
   content: "";
   position: absolute;
   top: 0;
@@ -550,12 +545,12 @@ h3 {
   pointer-events: none;
 }
 
-.device[data-os="mac"] .island::before {
+.island::before {
   left: -8px;
   background: radial-gradient(circle at 0 100%, transparent 7.5px, #000 8px);
 }
 
-.device[data-os="mac"] .island::after {
+.island::after {
   right: -8px;
   background: radial-gradient(circle at 100% 100%, transparent 7.5px, #000 8px);
 }

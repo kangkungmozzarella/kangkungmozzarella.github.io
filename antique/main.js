@@ -28,7 +28,7 @@
       "hero.kicker": "For macOS and Windows",
       "hero.title": "A pair of eyes for the top of your screen.",
       "hero.lede":
-        "Antique lives in your Mac's notch, or as a small island at the top of a Windows screen. It follows your pointer, moves to your music, and shows a message, a focus timer or the next prayer time when it matters.",
+        "Antique is a little notch at the top of your screen: wrapped around the camera notch on a Mac, hanging from the top edge on Windows. It follows your pointer, moves to your music, and shows a message, a focus timer or the next prayer time when it matters.",
       "hero.downloadMac": "Download for macOS",
       "hero.downloadWin": "Download for Windows",
       "hero.options": "Download options",
@@ -83,7 +83,7 @@
       "platforms.mac2": "Prefer it floating? Switch the shape to a small island in settings.",
       "platforms.mac3": "The music equalizer needs macOS 14.2 or later.",
       "platforms.win": "On Windows",
-      "platforms.win1": "It sits as a small island at the top centre of the screen.",
+      "platforms.win1": "It hangs from the top edge like a notch. Prefer it floating? Switch the shape to a small island in settings.",
       "platforms.win2":
         "Music comes from any player in the Windows media controls, like Spotify or YouTube in a browser.",
       "platforms.win3": "Find it in the tray, next to the clock. Windows 10 and 11.",
@@ -115,7 +115,7 @@
       "hero.kicker": "Untuk macOS dan Windows",
       "hero.title": "Sepasang mata untuk bagian atas layarmu.",
       "hero.lede":
-        "Antique tinggal di notch Mac, atau jadi pulau kecil di atas layar Windows. Matanya mengikuti kursor, ikut bergoyang dengan musik, dan menampilkan pesan, timer fokus, atau waktu sholat berikutnya saat dibutuhkan.",
+        "Antique adalah notch kecil di atas layarmu: melingkari notch kamera di Mac, menggantung dari tepi atas layar di Windows. Matanya mengikuti kursor, ikut bergoyang dengan musik, dan menampilkan pesan, timer fokus, atau waktu sholat berikutnya saat dibutuhkan.",
       "hero.downloadMac": "Unduh untuk macOS",
       "hero.downloadWin": "Unduh untuk Windows",
       "hero.options": "Pilihan unduhan",
@@ -170,7 +170,7 @@
       "platforms.mac2": "Lebih suka mengambang? Ganti bentuknya jadi pulau kecil di pengaturan.",
       "platforms.mac3": "Equalizer musik butuh macOS 14.2 atau lebih baru.",
       "platforms.win": "Di Windows",
-      "platforms.win1": "Dia muncul sebagai pulau kecil di tengah atas layar.",
+      "platforms.win1": "Dia menggantung dari tepi atas layar seperti notch. Lebih suka mengambang? Ganti bentuknya jadi pulau kecil di pengaturan.",
       "platforms.win2":
         "Musik diambil dari pemutar mana pun di kontrol media Windows, misalnya Spotify atau YouTube di browser.",
       "platforms.win3": "Cari di tray, dekat jam. Windows 10 dan 11.",
