@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Antique: eyes for the top of your screen</title>
+    <meta
+      name="description"
+      content="Antique lives in your Mac's notch, or as a small island at the top of a Windows screen. It follows your pointer, moves to your music, and shows what matters."
+    />
+    <meta name="theme-color" content="#0b0806" />
+    <meta property="og:title" content="Antique" />
+    <meta property="og:description" content="A pair of eyes for the top of your screen. For macOS and Windows." />
+    <meta property="og:image" content="assets/film-poster.jpg" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="assets/fonts/fraunces-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+
+    <!-- Opening: the eyes start up close, then back away into the screen and become the notch. -->
+    <div class="intro" id="intro" aria-hidden="true">
+      <div class="intro-shade" id="intro-shade"></div>
+      <div class="intro-eyes" id="intro-eyes"></div>
+      <p class="intro-hello" id="intro-hello" data-i18n="intro.hello">Hello.</p>
+    </div>
+
+    <header class="bar">
+      <a class="wordmark" href="#top" aria-label="Antique, back to top">Antique</a>
+      <nav class="bar-nav" aria-label="Sections">
+        <a href="#try" data-i18n="nav.try">Try it</a>
+        <a href="#download" data-i18n="nav.download">Download</a>
+      </nav>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="id" aria-pressed="false">ID</button>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <p class="kicker" data-i18n="hero.kicker">For macOS and Windows</p>
+        <h1 data-i18n="hero.title">A pair of eyes for the top of your screen.</h1>
+        <p class="lede" data-i18n="hero.lede">
+          Antique lives in your Mac's notch, or as a small island at the top of a Windows screen. It follows your
+          pointer, moves to your music, and shows a message, a focus timer or the next prayer time when it matters.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" id="hero-download" href="#download">Download for macOS</a>
+          <a class="button quiet" id="hero-other" href="#download">Get the Windows version</a>
+        </div>
+        <p class="meta"><span data-i18n="meta.version">Version</span> <span class="version">0.1.0</span></p>
+      </section>
+
+      <!-- The stage: a screen with Antique on it. Each chip below puts the notch in another state. -->
+      <section class="try" id="try" aria-labelledby="try-title">
+        <h2 class="sr-only" id="try-title" data-i18n="try.title">Try Antique</h2>
+
+        <!-- Chips sit right above the screen so the notch stays in view while you pick. -->
+        <div class="chips" role="group" aria-label="Show a moment" data-i18n-label="try.group">
+          <button type="button" data-state="rest" aria-pressed="true" data-i18n="chip.rest">Resting</button>
+          <button type="button" data-state="music" aria-pressed="false" data-i18n="chip.music">Music</button>
+          <button type="button" data-state="message" aria-pressed="false" data-i18n="chip.message">Message</button>
+          <button type="button" data-state="charge" aria-pressed="false" data-i18n="chip.charge">Charging</button>
+          <button type="button" data-state="headphones" aria-pressed="false" data-i18n="chip.headphones">Headphones</button>
+          <button type="button" data-state="focus" aria-pressed="false" data-i18n="chip.focus">Focus</button>
+          <button type="button" data-state="prayer" aria-pressed="false" data-i18n="chip.prayer">Prayer</button>
+          <button type="button" data-state="sleepy" aria-pressed="false" data-i18n="chip.sleepy">Sleepy</button>
+          <button type="button" data-state="open" aria-pressed="false" data-i18n="chip.open">Open</button>
+        </div>
+        <p class="try-caption" id="try-caption" aria-live="polite"></p>
+
+        <div class="device" id="device" data-os="mac">
+          <div class="screen" id="screen">
+            <div class="wallpaper" aria-hidden="true">
+              <svg viewBox="0 0 1920 1080" preserveAspectRatio="none">
+                <path d="M0 900 C 300 840 520 860 760 905 C 1000 950 1260 860 1520 880 C 1700 892 1820 920 1920 910 L1920 1080 L0 1080 Z" fill="#3a1d2e" opacity="0.75" />
+                <path d="M0 960 C 360 930 640 990 980 975 C 1300 960 1600 1000 1920 985 L1920 1080 L0 1080 Z" fill="#24121f" opacity="0.9" />
+              </svg>
+            </div>
+
+            <div class="menubar" aria-hidden="true">
+              <span class="mb-left"><i class="mb-logo"></i><i style="--w: 46px"></i><i style="--w: 26px"></i><i style="--w: 30px"></i><i style="--w: 34px"></i></span>
+              <span class="mb-right"><i style="--w: 14px"></i><i style="--w: 14px"></i><b class="mb-clock" id="mb-clock">16.13</b></span>
+            </div>
+
+            <div class="taskbar" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i>
+              <b class="tb-clock" id="tb-clock">16.13</b>
+            </div>
+
+            <!-- Antique, drawn at screen size and scaled with the screen (--u). -->
+            <div class="island-holder" id="island-holder">
+              <button
+                class="island"
+                id="island"
+                type="button"
+                data-state="rest"
+                aria-expanded="false"
+                aria-describedby="try-caption"
+              >
+                <span class="sr-only" data-i18n="island.label">Antique's notch. Click to open the panel.</span>
+                <span class="layer row" aria-hidden="true">
+                  <span class="wing left" id="wing-left"></span>
+                  <span class="eyes" id="eyes"></span>
+                  <span class="wing right" id="wing-right"></span>
+                </span>
+                <img class="layer open" src="assets/panel-home.png" width="440" height="224" alt="" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+          <div class="hinge" aria-hidden="true"></div>
+        </div>
+
+        <div class="os" role="group" aria-label="Screen">
+          <button type="button" data-os="mac" aria-pressed="true">macOS</button>
+          <button type="button" data-os="windows" aria-pressed="false">Windows</button>
+        </div>
+        <p class="try-more" data-i18n="try.more">
+          It also speaks up when a drive is plugged in, the battery runs low, or rain is on the way.
+        </p>
+      </section>
+
+      <section class="panel" id="panel" aria-labelledby="panel-title">
+        <h2 id="panel-title" data-i18n="panel.title">Click it and it opens up.</h2>
+        <p class="panel-intro" data-i18n="panel.body">
+          The notch grows into a small panel with your day in one place. Switch pages along the top, or open the
+          settings window for everything else.
+        </p>
+
+        <div class="tabs" role="tablist" aria-label="Panel pages">
+          <button type="button" role="tab" id="tab-home" aria-controls="view-home" aria-selected="true" data-i18n="panel.home">Home</button>
+          <button type="button" role="tab" id="tab-focus" aria-controls="view-focus" aria-selected="false" tabindex="-1" data-i18n="panel.focus">Focus</button>
+          <button type="button" role="tab" id="tab-prayer" aria-controls="view-prayer" aria-selected="false" tabindex="-1" data-i18n="panel.prayer">Prayer times</button>
+        </div>
+
+        <div class="views">
+          <figure class="view" role="tabpanel" id="view-home" aria-labelledby="tab-home">
+            <img src="assets/panel-home.png" width="440" height="224" loading="lazy" alt="" data-i18n-alt="panel.homeAlt" />
+            <figcaption data-i18n="panel.homeText">The time, what's playing, your focus timer and the next prayer, at a glance.</figcaption>
+          </figure>
+          <figure class="view" role="tabpanel" id="view-focus" aria-labelledby="tab-focus" hidden>
+            <img src="assets/panel-focus.png" width="440" height="216" loading="lazy" alt="" data-i18n-alt="panel.focusAlt" />
+            <figcaption data-i18n="panel.focusText">A Pomodoro timer drawn as an hourglass. The sand runs while you work, and the glass flips over for your break.</figcaption>
+          </figure>
+          <figure class="view" role="tabpanel" id="view-prayer" aria-labelledby="tab-prayer" hidden>
+            <img src="assets/panel-prayer.png" width="440" height="278" loading="lazy" alt="" data-i18n-alt="panel.prayerAlt" />
+            <figcaption data-i18n="panel.prayerText">Prayer times for your city, a reminder before each one, and an adzan sound you choose.</figcaption>
+          </figure>
+        </div>
+
+        <p class="panel-more" data-i18n="panel.more">
+          There are pages for music with synced lyrics, the weather, and notifications too.
+        </p>
+        <p class="note" data-i18n="panel.note">Screenshots from the app. Its interface is in Indonesian for now.</p>
+      </section>
+
+      <section class="platforms" aria-labelledby="platforms-title">
+        <h2 id="platforms-title" data-i18n="platforms.title">At home on both.</h2>
+        <div class="platform">
+          <h3 data-i18n="platforms.mac">On a Mac</h3>
+          <ul>
+            <li data-i18n="platforms.mac1">It wraps around the notch, so it looks like part of the screen.</li>
+            <li data-i18n="platforms.mac2">Prefer it floating? Switch the shape to a small island in settings.</li>
+            <li data-i18n="platforms.mac3">The music equalizer needs macOS 14.2 or later.</li>
+          </ul>
+        </div>
+        <div class="platform">
+          <h3 data-i18n="platforms.win">On Windows</h3>
+          <ul>
+            <li data-i18n="platforms.win1">It sits as a small island at the top centre of the screen.</li>
+            <li data-i18n="platforms.win2">Music comes from any player in the Windows media controls, like Spotify or YouTube in a browser.</li>
+            <li data-i18n="platforms.win3">Find it in the tray, next to the clock. Windows 10 and 11.</li>
+          </ul>
+        </div>
+        <p class="platforms-both" data-i18n="platforms.both">
+          On both, the settings live in a normal app window: eyes, music, focus, prayer times and alerts.
+        </p>
+      </section>
+
+      <section class="film" aria-labelledby="film-title">
+        <h2 id="film-title" data-i18n="film.title">The launch film</h2>
+        <div class="film-frame">
+          <video id="film" controls playsinline muted preload="none" poster="assets/film-poster.jpg" width="1920" height="1080">
+            <source src="assets/antique-launch.mp4" type="video/mp4" />
+          </video>
+          <p class="film-error" id="film-error" hidden data-i18n="film.error">
+            The film didn't load. <a href="assets/antique-launch.mp4">Open the video file</a> instead.
+          </p>
+        </div>
+        <p class="caption" data-i18n="film.caption">28 seconds, no sound.</p>
+      </section>
+
+      <section class="more-eyes" aria-labelledby="eyes-title">
+        <div class="more-eyes-text">
+          <h2 id="eyes-title" data-i18n="eyes.title">More eyes are on the way.</h2>
+          <p data-i18n="eyes.body">Antique ships with Lentera, the warm amber pair you met above. Other styles are coming soon.</p>
+        </div>
+        <div class="iris-row" id="iris-row" aria-hidden="true"></div>
+      </section>
+
+      <section class="download" id="download" aria-labelledby="download-title">
+        <h2 id="download-title" data-i18n="download.title">Download Antique</h2>
+        <div class="downloads">
+          <div class="dl" data-platform="mac">
+            <h3>macOS</h3>
+            <p data-i18n="download.macFile">Disk image (.dmg)</p>
+            <a class="button primary" data-download="mac" href="#download">Download for macOS</a>
+          </div>
+          <div class="dl" data-platform="windows">
+            <h3>Windows</h3>
+            <p data-i18n="download.winFile">Installer (.exe), Windows 10 and 11</p>
+            <a class="button primary" data-download="windows" href="#download">Download for Windows</a>
+          </div>
+        </div>
+        <p class="meta"><span data-i18n="meta.version">Version</span> <span class="version">0.1.0</span></p>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>Antique <span class="version">0.1.0</span></p>
+      <p>
+        <span data-i18n="foot.font">Headings set in Fraunces,</span>
+        <a href="assets/fonts/OFL.txt" data-i18n="foot.license">SIL Open Font License</a>
+      </p>
+      <p><a href="privacy.html" data-i18n="foot.privacy">Privacy</a></p>
+      <p><a href="#top" data-i18n="foot.top">Back to top</a></p>
+    </footer>
+
+    <script src="main.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privasi · Antique</title>
+    <meta name="description" content="Data apa saja yang dipakai Antique dan ke mana dikirim." />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <style>
+      @font-face {
+        font-family: "Fraunces";
+        font-weight: 600;
+        font-display: swap;
+        src: url("assets/fonts/fraunces-latin-600-normal.woff2") format("woff2");
+      }
+
+      :root {
+        --night: #0b0806;
+        --line: rgb(255 246 228 / 0.13);
+        --fg: #f5f2ee;
+        --muted: #b5aca5;
+        --accent: #ff9b3d;
+        color-scheme: dark;
+      }
+
+      body {
+        margin: 0;
+        background: var(--night);
+        color: var(--fg);
+        font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+
+      main {
+        width: min(720px, 100% - 32px);
+        margin: 0 auto;
+        padding: 56px 0 80px;
+      }
+
+      h1,
+      h2 {
+        font-family: "Fraunces", Georgia, serif;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+
+      h1 {
+        margin: 0 0 6px;
+        font-size: clamp(30px, 6vw, 42px);
+      }
+
+      h2 {
+        margin: 40px 0 10px;
+        font-size: 22px;
+      }
+
+      p,
+      li {
+        color: var(--muted);
+      }
+
+      b {
+        color: var(--fg);
+        font-weight: 600;
+      }
+
+      a {
+        color: var(--accent);
+      }
+
+      .updated {
+        margin: 0;
+        font-size: 14px;
+      }
+
+      hr {
+        margin: 48px 0;
+        border: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .back {
+        display: inline-block;
+        margin-bottom: 32px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="./">← Antique</a>
+
+      <h1>Privasi</h1>
+      <p class="updated">Berlaku sejak 18 November 2026</p>
+
+      <p>
+        Antique adalah aplikasi notch untuk Windows dan macOS. Antique tidak punya akun, tidak memakai
+        iklan atau pelacak, dan tidak punya server sendiri yang menerima data pribadimu.
+      </p>
+
+      <h2>Yang tetap di perangkatmu</h2>
+      <ul>
+        <li><b>Lokasi persis</b> dari layanan lokasi sistem, untuk menghitung jadwal sholat. Jadwal dihitung di perangkat.</li>
+        <li><b>Isi notifikasi aplikasi lain</b> (mis. WhatsApp), hanya untuk ditampilkan sesaat di notch, lalu dilupakan.</li>
+        <li><b>Suara musik</b> yang diputar, dianalisis sesaat untuk equalizer. Tidak direkam dan tidak disimpan.</li>
+        <li><b>Pengaturan, timer, dan lisensi</b> disimpan di folder data aplikasi di perangkatmu.</li>
+      </ul>
+
+      <h2>Yang dikirim ke layanan lain</h2>
+      <ul>
+        <li>
+          <b>Cuaca:</b> koordinat yang dibulatkan (sekitar 10 km) dikirim ke
+          <a href="https://api.met.no/">MET Norway</a> untuk mengambil prakiraan.
+        </li>
+        <li>
+          <b>Lirik:</b> judul, artis, album, dan durasi lagu yang sedang diputar dikirim ke
+          <a href="https://lrclib.net/">LRCLIB</a> untuk mencari lirik.
+        </li>
+        <li><b>Pembaruan:</b> Antique memeriksa versi baru di GitHub. Ini bisa dimatikan di Pengaturan → Tentang.</li>
+      </ul>
+      <p>
+        Layanan tersebut menerima alamat IP-mu seperti saat membuka situs biasa, dan tunduk pada kebijakan
+        privasinya masing-masing. Antique tidak mengirim namamu, email, atau isi pesan ke mana pun.
+      </p>
+
+      <h2>Kontak</h2>
+      <p>
+        Pertanyaan atau laporan masalah:
+        <a href="https://github.com/kangkungmozzarella/antique-releases/issues">github.com/kangkungmozzarella/antique-releases/issues</a>.
+      </p>
+
+      <hr />
+
+      <h1 lang="en">Privacy</h1>
+      <div lang="en">
+        <p>
+          Antique has no accounts, ads, or trackers, and no server of its own that receives your personal
+          data. Your exact location (for prayer times), the content of other apps' notifications, and the
+          audio used for the equalizer stay on your device and are not stored.
+        </p>
+        <p>
+          Antique sends: rounded coordinates (about 10 km) to MET Norway for the weather forecast; the title,
+          artist, album and length of the song playing to LRCLIB for lyrics; and update checks to GitHub
+          (can be turned off in Settings → About). These services see your IP address like any website and
+          follow their own privacy policies.
+        </p>
+      </div>
+    </main>
+  </body>
+</html>
